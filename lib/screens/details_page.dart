@@ -122,23 +122,29 @@ class _DetailPageState extends State<DetailPage> {
                     iconSize: 30.0,
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
-                      FavoriteService().setfavorite(
-                        widget.documentSnapshot["image"],
-                        widget.documentSnapshot["name"],
-                        widget.documentSnapshot["breed"],
-                        widget.documentSnapshot["description"],
-                        widget.documentSnapshot["id"],
-                        widget.documentSnapshot["owner"],
-                        widget.documentSnapshot["sex"],
-                        widget.documentSnapshot["color"],
-                        widget.documentSnapshot["age"],
-                        widget.documentSnapshot["adress"],
-                        widget.documentSnapshot["ownerImage"],
-                        widget.documentSnapshot["type"],
-                        widget.documentSnapshot["createdAt"],
-                        widget.documentSnapshot["phone"],
-                        widget.documentSnapshot["docID"],
-                      );
+                      if (isfavorite(widget.documentSnapshot["docID"]) ==
+                          false) {
+                        FavoriteService().setfavorite(
+                          widget.documentSnapshot["image"],
+                          widget.documentSnapshot["name"],
+                          widget.documentSnapshot["breed"],
+                          widget.documentSnapshot["description"],
+                          widget.documentSnapshot["id"],
+                          widget.documentSnapshot["owner"],
+                          widget.documentSnapshot["sex"],
+                          widget.documentSnapshot["color"],
+                          widget.documentSnapshot["age"],
+                          widget.documentSnapshot["adress"],
+                          widget.documentSnapshot["ownerImage"],
+                          widget.documentSnapshot["type"],
+                          widget.documentSnapshot["createdAt"],
+                          widget.documentSnapshot["phone"],
+                          widget.documentSnapshot["docID"],
+                        );
+                      } else {
+                        FavoriteService()
+                            .infavorite(widget.documentSnapshot["docID"]);
+                      }
                     },
                   ),
                 ],
