@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "316956774805",
+    "firebase_url": "https://rescuemeapp-d0e4b-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "rescuemeapp-d0e4b",
+    "storage_bucket": "rescuemeapp-d0e4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316956774805:android:3e9864e3a1690b83bee69c",
+        "android_client_info": {
+          "package_name": "com.example.rescue_me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316956774805-3b2cjbn5gfourcd0ggdnugg8q4sg8gaj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rescue_me",
+            "certificate_hash": "c1b07288f7499763fc6f421a25fc29c45eb6423b"
+          }
+        },
+        {
+          "client_id": "316956774805-a8li0qplghqbrdn1kkuvc1rf37krulvc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHl8aFaoFtV1DsMArDXB56B3mQW2-rrUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316956774805-a8li0qplghqbrdn1kkuvc1rf37krulvc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "316956774805-9bkbtp31hlajqlbv47043m53u4evvlpr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.rescueMe"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316956774805:android:19b1338fd11ca70abee69c",
+        "android_client_info": {
+          "package_name": "com.tekup.adoptme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316956774805-a8li0qplghqbrdn1kkuvc1rf37krulvc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHl8aFaoFtV1DsMArDXB56B3mQW2-rrUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316956774805-a8li0qplghqbrdn1kkuvc1rf37krulvc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "316956774805-9bkbtp31hlajqlbv47043m53u4evvlpr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.rescueMe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
