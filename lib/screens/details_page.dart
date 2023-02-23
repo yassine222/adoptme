@@ -313,10 +313,11 @@ class _DetailPageState extends State<DetailPage> {
         favorite.add(doc.id);
       });
       favoriteList = favorite;
-
-      setState(() {
-        favoriteList = favorite;
-      });
+      if (mounted) {
+        setState(() {
+          favoriteList = favorite;
+        });
+      }
     });
     if (favoriteList.contains(id)) {
       return true;

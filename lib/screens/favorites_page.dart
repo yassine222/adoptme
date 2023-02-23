@@ -41,51 +41,48 @@ class _FavoritsPageState extends State<FavoritsPage> {
             itemBuilder: (BuildContext context, int index) {
               final DocumentSnapshot documentSnapshot =
                   snapshot.data!.docs[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.to(DetailPage(documentSnapshot: documentSnapshot));
-                },
-                child: Card(
-                  color: Color.fromARGB(255, 179, 138, 228),
-                  shadowColor: Colors.deepPurple,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        onTap: () {},
-                        leading: Container(
-                          width: 100,
-                          color: Colors.black,
-                          child: Image(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              documentSnapshot['image'],
-                            ),
+              return Card(
+                color: Color.fromARGB(255, 179, 138, 228),
+                shadowColor: Colors.deepPurple,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ListTile(
+                      onTap: () {
+                        Get.to(DetailPage(documentSnapshot: documentSnapshot));
+                      },
+                      leading: Container(
+                        width: 100,
+                        color: Colors.black,
+                        child: Image(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            documentSnapshot['image'],
                           ),
                         ),
-                        title: Text(documentSnapshot['name']),
-                        subtitle: Text(documentSnapshot['breed']),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          TextButton.icon(
-                            onPressed: () {
-                              FavoriteService().infavorite(documentSnapshot.id);
-                            },
-                            icon: Icon(
-                              Icons.favorite,
-                              color: Colors.deepPurple,
-                            ),
-                            label: Text(
-                              'Défavoriser ',
-                              style: TextStyle(color: Colors.deepPurple),
-                            ),
+                      title: Text(documentSnapshot['name']),
+                      subtitle: Text(documentSnapshot['breed']),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        TextButton.icon(
+                          onPressed: () {
+                            FavoriteService().infavorite(documentSnapshot.id);
+                          },
+                          icon: Icon(
+                            Icons.favorite,
+                            color: Colors.deepPurple,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          label: Text(
+                            'Défavoriser ',
+                            style: TextStyle(color: Colors.deepPurple),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               );
             },
