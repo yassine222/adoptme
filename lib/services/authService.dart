@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:ffi';
+
 import 'package:adoptme/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthService {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   Future SignUp(BuildContext context, String email, String password) async {
     showDialog(
       context: context,
