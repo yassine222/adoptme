@@ -173,9 +173,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     fontSize: _drawerFontSize,
                     color: Theme.of(context).colorScheme.secondary),
               ),
-              onTap: () {
-                Get.to(FavoritsPage());
-              },
+              onTap: () {},
             ),
             Divider(
               color: Theme.of(context).primaryColor,

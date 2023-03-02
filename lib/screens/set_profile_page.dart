@@ -178,7 +178,6 @@ class _SetProfileState extends State<SetProfile> {
                                 ThemeHelper().inputBoxDecorationShaddow(),
                             child: TextFormField(
                               controller: addressController,
-                              obscureText: true,
                               decoration: ThemeHelper().textInputDecoration(
                                   "Address",
                                   "Enter your address",
