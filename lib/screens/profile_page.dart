@@ -77,7 +77,8 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Container(
               height: 100,
-              child: HeaderWidget(100, false, Icons.house_rounded),
+              child: HeaderWidget(
+                  100, false, const AssetImage("assets/images/logo.png")),
             ),
             Container(
               alignment: Alignment.center,

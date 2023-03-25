@@ -6,6 +6,7 @@ import 'package:adoptme/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 
 class AuthService {
@@ -104,6 +105,26 @@ class AuthService {
           snackPosition: SnackPosition.BOTTOM);
 
       Navigator.of(context).pop();
+    }
+  }
+
+  Future<void> SignInWithFacebook(
+    BuildContext context,
+  ) async {
+    try {
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      await auth.signInWithCredential(facebookAuthCredential);
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar("Required", e.message.toString(),
+          icon: const Icon(
+            Icons.warning_amber_rounded,
+          ),
+          backgroundColor: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

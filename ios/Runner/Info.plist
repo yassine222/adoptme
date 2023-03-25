@@ -56,5 +56,21 @@
   		<string>sms</string>
   		<string>tel</string>
 	</array>
+
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+  <key>CFBundleURLSchemes</key>
+  <array>
+    <string>fb140993728656641</string>
+  </array>
+  </dict>
+</array>
+<key>FacebookAppID</key>
+<string>140993728656641</string>
+<key>FacebookClientToken</key>
+<string>9c81709b2b8a0ea2ec24ceeff83a8a9c</string>
+<key>FacebookDisplayName</key>
+<string>auth</string>
 </dict>
 </plist>

@@ -67,8 +67,8 @@ class _VerificationPageState extends State<VerificationPage> {
               children: [
                 SizedBox(
                   height: _headerHeight,
-                  child: HeaderWidget(
-                      _headerHeight, true, Icons.privacy_tip_outlined),
+                  child: HeaderWidget(_headerHeight, true,
+                      const AssetImage("assets/images/logo.png")),
                 ),
                 SafeArea(
                   child: Container(

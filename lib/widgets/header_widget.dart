@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 class HeaderWidget extends StatefulWidget {
   final double _height;
   final bool _showIcon;
-  final IconData _icon;
+  final AssetImage _logo;
 
-  const HeaderWidget(this._height, this._showIcon, this._icon, {Key? key})
+  const HeaderWidget(this._height, this._showIcon, this._logo, {Key? key})
       : super(key: key);
 
   @override
   _HeaderWidgetState createState() =>
-      _HeaderWidgetState(_height, _showIcon, _icon);
+      _HeaderWidgetState(_height, _showIcon, _logo);
 }
 
 class _HeaderWidgetState extends State<HeaderWidget> {
   double _height;
   bool _showIcon;
-  IconData _icon;
+  AssetImage _logo;
 
-  _HeaderWidgetState(this._height, this._showIcon, this._icon);
+  _HeaderWidgetState(this._height, this._showIcon, this._logo);
 
   @override
   Widget build(BuildContext context) {
@@ -94,32 +94,19 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         Visibility(
           visible: _showIcon,
           child: Container(
-            height: _height - 40,
+            height: _height - 10,
             child: Center(
               child: Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.only(
-                  left: 5.0,
-                  top: 20.0,
-                  right: 5.0,
-                  bottom: 20.0,
-                ),
-                decoration: BoxDecoration(
-                  // borderRadius: BorderRadius.circular(20),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(100),
-                    topRight: Radius.circular(100),
-                    bottomLeft: Radius.circular(60),
-                    bottomRight: Radius.circular(60),
+                  margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.only(
+                    left: 5.0,
+                    top: 20.0,
+                    right: 5.0,
+                    bottom: 20.0,
                   ),
-                  border: Border.all(width: 5, color: Colors.white),
-                ),
-                child: Icon(
-                  _icon,
-                  color: Colors.white,
-                  size: 40.0,
-                ),
-              ),
+                  child: Image(
+                    image: _logo,
+                  )),
             ),
           ),
         ),

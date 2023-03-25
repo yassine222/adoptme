@@ -40,10 +40,13 @@ class _SignupPageState extends State<SignupPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: _headerHeight,
-              child: HeaderWidget(_headerHeight, true,
-                  Icons.login_rounded), //let's create a common header widget
+              child: HeaderWidget(
+                  _headerHeight,
+                  true,
+                  const AssetImage(
+                      "assets/images/logo.png")), //let's create a common header widget
             ),
             SafeArea(
               child: Container(

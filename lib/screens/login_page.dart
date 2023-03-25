@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import '../main.dart';
 import 'forgot_password_page.dart';
@@ -41,8 +43,11 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Container(
               height: _headerHeight,
-              child: HeaderWidget(_headerHeight, true,
-                  Icons.login_rounded), //let's create a common header widget
+              child: HeaderWidget(
+                  _headerHeight,
+                  true,
+                  const AssetImage(
+                      "assets/images/logo.png")), //let's create a common header widget
             ),
             SafeArea(
               child: Container(
@@ -171,6 +176,23 @@ class _LoginPageState extends State<LoginPage> {
                                             .secondary),
                                   ),
                                 ])),
+                              ),
+                              Text(
+                                "Or create account using social media",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                child: FaIcon(
+                                  FontAwesomeIcons.facebook,
+                                  size: 35,
+                                  color: HexColor("#3E529C"),
+                                ),
+                                onTap: () {
+                                  AuthService().SignInWithFacebook(context);
+                                },
                               ),
                             ],
                           )),

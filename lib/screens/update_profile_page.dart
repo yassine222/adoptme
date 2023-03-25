@@ -60,7 +60,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
           children: [
             const SizedBox(
               height: 150,
-              child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded),
+              child: HeaderWidget(
+                  150, false, AssetImage("assets/images/logo.png")),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(25, 50, 25, 10),
