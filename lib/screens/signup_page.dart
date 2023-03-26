@@ -1,3 +1,4 @@
+import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/services/authService.dart';
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:adoptme/widgets/header_widget.dart';
@@ -5,6 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/route_manager.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import '../main.dart';
 import 'forgot_password_page.dart';
@@ -50,9 +55,9 @@ class _SignupPageState extends State<SignupPage> {
             ),
             SafeArea(
               child: Container(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                   margin: const EdgeInsets.fromLTRB(
-                      20, 10, 20, 10), // This will be the login form
+                      20, 0, 20, 10), // This will be the login form
                   child: Column(
                     children: [
                       const Text(
@@ -65,7 +70,7 @@ class _SignupPageState extends State<SignupPage> {
                         'Create a new account',
                         style: const TextStyle(color: Colors.grey),
                       ),
-                      const SizedBox(height: 30.0),
+                      const SizedBox(height: 20.0),
                       Form(
                           key: _formKey,
                           child: Column(
@@ -86,7 +91,7 @@ class _SignupPageState extends State<SignupPage> {
                                       'Email', 'Enter your email'),
                                 ),
                               ),
-                              const SizedBox(height: 30.0),
+                              const SizedBox(height: 20.0),
                               Container(
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
@@ -103,7 +108,7 @@ class _SignupPageState extends State<SignupPage> {
                                       'Password', 'Enter your password'),
                                 ),
                               ),
-                              const SizedBox(height: 30.0),
+                              const SizedBox(height: 20.0),
                               Container(
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
@@ -172,6 +177,26 @@ class _SignupPageState extends State<SignupPage> {
                                         color: Theme.of(context).accentColor),
                                   ),
                                 ])),
+                              ),
+                              const Text(
+                                "Or create account using social media",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              GestureDetector(
+                                child: FaIcon(
+                                  FontAwesomeIcons.facebook,
+                                  size: 35,
+                                  color: HexColor("#3E529C"),
+                                ),
+                                onTap: () {
+                                  AuthService()
+                                      .SignInWithFacebook(context)
+                                      .then(
+                                          (value) => Get.to(const HomePage()));
+                                },
                               ),
                             ],
                           )),
