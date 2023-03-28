@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:adoptme/screens/add_pet_page.dart';
+import 'package:adoptme/screens/banned_page.dart';
 import 'package:adoptme/screens/explore_on_maps_page.dart';
 import 'package:adoptme/screens/favorites_page.dart';
 import 'package:adoptme/screens/home_page.dart';
@@ -151,10 +152,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ExploreOnMaps()),
-                );
+                Get.to(BannedPage());
               },
             ),
             Divider(
