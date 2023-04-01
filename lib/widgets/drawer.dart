@@ -6,6 +6,7 @@ import 'package:adoptme/screens/explore_on_maps_page.dart';
 import 'package:adoptme/screens/favorites_page.dart';
 import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/messages_page.dart';
+import 'package:adoptme/screens/my_post_page.dart';
 import 'package:adoptme/screens/signup_page.dart';
 import 'package:adoptme/screens/update_profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -140,6 +141,24 @@ class _DrawerPageState extends State<DrawerPage> {
               height: 1,
             ),
             ListTile(
+              leading: Icon(Icons.my_library_books_rounded,
+                  size: _drawerIconSize,
+                  color: Theme.of(context).colorScheme.secondary),
+              title: Text(
+                'My Posts',
+                style: TextStyle(
+                    fontSize: _drawerFontSize,
+                    color: Theme.of(context).colorScheme.secondary),
+              ),
+              onTap: () {
+                Get.to(MyPostsPage());
+              },
+            ),
+            Divider(
+              color: Theme.of(context).primaryColor,
+              height: 1,
+            ),
+            ListTile(
               leading: Icon(
                 Icons.map_sharp,
                 size: _drawerIconSize,
@@ -152,7 +171,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Get.to(BannedPage());
+                Get.to(ExploreOnMaps());
               },
             ),
             Divider(

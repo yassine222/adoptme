@@ -10,6 +10,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -223,11 +225,21 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     ),
                                     onPressed: () {
                                       updateProfile(
-                                          user.uid,
-                                          '${data['fullname']}',
-                                          '${data['phone']}',
-                                          '${data['image']}',
-                                          '${data['adresse']}');
+                                              user.uid,
+                                              '${data['fullname']}',
+                                              '${data['phone']}',
+                                              '${data['image']}',
+                                              '${data['adresse']}')
+                                          .then((value) {
+                                        Get.snackbar("Success",
+                                            "Profile updated successfully",
+                                            icon: const Icon(
+                                              Icons.check_circle_outlined,
+                                            ),
+                                            backgroundColor: Colors.white,
+                                            snackPosition:
+                                                SnackPosition.BOTTOM);
+                                      });
                                     },
                                   ),
                                 ),

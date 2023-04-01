@@ -1,3 +1,4 @@
+import 'package:adoptme/screens/petCard.dart';
 import 'package:flutter/material.dart';
 
 class ExploreOnMaps extends StatefulWidget {
@@ -14,7 +15,6 @@ class _ExploreOnMapsState extends State<ExploreOnMaps> {
       appBar: AppBar(
         title: const Text("Explore Pets on Maps"),
       ),
-      body: Container(),
     );
   }
 }

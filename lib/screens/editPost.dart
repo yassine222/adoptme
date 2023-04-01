@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:adoptme/main.dart';
 import 'package:adoptme/screens/home_page.dart';
+import 'package:adoptme/screens/my_post_page.dart';
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:adoptme/widgets/ageSelector_page.dart';
 import 'package:adoptme/widgets/inputField.dart';
@@ -18,12 +19,15 @@ import 'package:uuid/uuid.dart';
 
 import '../widgets/regionSelector.dart';
 
-class AddPetPage extends StatefulWidget {
+class EditPost extends StatefulWidget {
+  final DocumentSnapshot documentSnapshot;
+
+  const EditPost({super.key, required this.documentSnapshot});
   @override
-  _AddPetPageState createState() => _AddPetPageState();
+  _EditPostState createState() => _EditPostState();
 }
 
-class _AddPetPageState extends State<AddPetPage> {
+class _EditPostState extends State<EditPost> {
   final TextEditingController petNameController = TextEditingController();
   final TextEditingController petBreedController = TextEditingController();
   final picker = ImagePicker();
@@ -32,29 +36,29 @@ class _AddPetPageState extends State<AddPetPage> {
   File? image;
   // Owner Infos
 
-  String? _ownerImage;
-  String? _ownerName;
-  String? _ownerID;
-  String? _ownerPhone;
-  String? _ownerAdress;
   // Pet Infos
   String? _imageUrl;
   String? _petType;
   String? _petBreed;
   String? _petAge;
   String? _petGender;
-  String _petDescription = '';
+  String? _petDescription;
   String? _petRegion;
-  Timestamp _createdAt = Timestamp.now();
+  String? _petName;
+
+  Timestamp _updatedAt = Timestamp.now();
   @override
   void initState() {
-    // TODO: implement initState
+    _petGender = widget.documentSnapshot["sex"];
+    _imageUrl = widget.documentSnapshot["image"];
+    _petAge = widget.documentSnapshot["age"];
+    _petName = widget.documentSnapshot["name"];
+    _petBreed = widget.documentSnapshot["breed"];
+    _petType = widget.documentSnapshot["type"];
+    _petDescription = widget.documentSnapshot["description"];
+    _petRegion = widget.documentSnapshot["region"];
+
     super.initState();
-    getUserPostData(user!.uid);
-    _petGender = 'male';
-    _petAge = "1";
-    _petRegion = "tunis";
-    _petType = "dog";
   }
 
   @override
@@ -95,7 +99,7 @@ class _AddPetPageState extends State<AddPetPage> {
                               ? FileImage(
                                   image!,
                                 )
-                              : AssetImage('assets/images/place_holder2.webp')
+                              : NetworkImage(widget.documentSnapshot["image"])
                                   as ImageProvider,
                           fit: BoxFit.cover,
                         ),
@@ -128,7 +132,7 @@ class _AddPetPageState extends State<AddPetPage> {
                       children: [
                         PetCategorie(
                           type: ['Dog', 'Cat', 'Parrots', 'Fish', "Other"],
-                          initialType: "Dog",
+                          initialType: widget.documentSnapshot["type"],
                           onTypeSelected: (type) {
                             setState(() {
                               _petType = type;
@@ -139,7 +143,10 @@ class _AddPetPageState extends State<AddPetPage> {
                           children: [
                             Expanded(
                               child: InputField(
-                                controller: petNameController,
+                                onChanged: (value) {
+                                  _petName = value;
+                                },
+                                initialValue: widget.documentSnapshot["name"],
                                 title: "Pet Name",
                                 validator: (val) {
                                   if (val!.isEmpty) {
@@ -154,7 +161,10 @@ class _AddPetPageState extends State<AddPetPage> {
                             ),
                             Expanded(
                               child: InputField(
-                                controller: petBreedController,
+                                onChanged: (value) {
+                                  _petBreed = value;
+                                },
+                                initialValue: widget.documentSnapshot["breed"],
                                 title: "Pet Breed",
                                 validator: (val) {
                                   if (val!.isEmpty) {
@@ -170,10 +180,10 @@ class _AddPetPageState extends State<AddPetPage> {
                           children: [
                             Expanded(
                               child: AgeSelector(
-                                initialAge: "1",
+                                initialAge: widget.documentSnapshot["age"],
                                 onAgeSelected: (age) {
                                   setState(() {
-                                    _petAge = age;
+                                    _petAge = age.toString();
                                   });
                                 },
                               ),
@@ -184,7 +194,8 @@ class _AddPetPageState extends State<AddPetPage> {
                             Expanded(
                               child: RegionSelector(
                                 regions: ['Tunis', 'Sfax', 'Sousse', 'Bizerte'],
-                                initialRegion: 'Tunis',
+                                initialRegion:
+                                    widget.documentSnapshot["region"],
                                 onRegionSelected: (region) {
                                   setState(() {
                                     _petRegion = region;
@@ -214,7 +225,12 @@ class _AddPetPageState extends State<AddPetPage> {
                                       width: 1.0,
                                     ),
                                     borderRadius: BorderRadius.circular(10)),
-                                child: TextField(
+                                child: TextFormField(
+                                  onChanged: (value) {
+                                    _petDescription = value;
+                                  },
+                                  initialValue:
+                                      widget.documentSnapshot["description"],
                                   decoration: InputDecoration(),
                                   keyboardType: TextInputType.multiline,
                                   maxLines: 5,
@@ -292,8 +308,17 @@ class _AddPetPageState extends State<AddPetPage> {
                                               snackPosition:
                                                   SnackPosition.BOTTOM);
                                         } else {
-                                          addUserPost(user!.uid).then(
-                                              (value) => Get.to(HomePage()));
+                                          updatePost(widget.documentSnapshot.id)
+                                              .then((value) {
+                                            Get.snackbar("Success",
+                                                "Post updated successfully",
+                                                icon: const Icon(
+                                                  Icons.check_circle_outlined,
+                                                ),
+                                                backgroundColor: Colors.white,
+                                                snackPosition:
+                                                    SnackPosition.BOTTOM);
+                                          });
                                         }
                                       }
                                     },
@@ -342,49 +367,21 @@ class _AddPetPageState extends State<AddPetPage> {
     }
   }
 
-  Future<void> addUserPost(String userId) async {
+  Future<void> updatePost(String postId) async {
     // Generate a new document ID
-    final newDocRef = FirebaseFirestore.instance.collection('UserPost').doc();
-    final newDocId = newDocRef.id;
+    final postToEdit =
+        FirebaseFirestore.instance.collection('UserPost').doc(postId);
 
     // Create the new document with the ID
-    await newDocRef.set({
-      'owner': _ownerName,
-      'name': petNameController.text.trim(),
-      'breed': petBreedController.text.trim(),
+    await postToEdit.update({
+      'name': _petName,
+      'breed': _petBreed,
       'image': _imageUrl,
       'description': _petDescription,
       'sex': _petGender,
       'age': _petAge.toString(),
-      'color': "color",
-      'id': userId,
-      'adress': _ownerAdress,
-      'ownerImage': _ownerImage,
-      'type': _petType!.toLowerCase(),
-      'docID': newDocId,
-      'phone': _ownerPhone,
-      "region": _petRegion,
-      'isactive': true,
-      'createdAt': _createdAt,
-      'isadopted': false,
+      'type': _petType!.toLowerCase().capitalizeFirst,
+      "region": _petRegion!.toLowerCase().capitalizeFirst,
     });
-  }
-
-  getUserPostData(String userID) async {
-    final postRef =
-        FirebaseFirestore.instance.collection('UserProfile').doc(userID);
-    final postDoc = await postRef.get();
-
-    if (postDoc.exists) {
-      final data = postDoc.data();
-      setState(() {
-        _ownerImage = data!['image'];
-        _ownerName = data['fullname'];
-        _ownerAdress = data["adresse"];
-        _ownerPhone = data['phone'];
-      });
-    } else {
-      throw Exception('Post with ID $userID does not exist.');
-    }
   }
 }

@@ -10,15 +10,20 @@ class InputField extends StatelessWidget {
   final TextEditingController? controller;
   final Widget? widget;
   final String? initialValue;
-  const InputField(
-      {super.key,
-      required this.title,
-      this.hint,
-      this.controller,
-      this.inputType,
-      this.maxlength,
-      this.initialValue,
-      this.widget});
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  const InputField({
+    super.key,
+    required this.title,
+    this.hint,
+    this.controller,
+    this.inputType,
+    this.maxlength,
+    this.initialValue,
+    this.widget,
+    this.validator,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,7 @@ class InputField extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16, color: Colors.deepPurple),
           ),
           Container(
             margin: const EdgeInsets.only(top: 8.0),
@@ -37,7 +42,7 @@ class InputField extends StatelessWidget {
             height: 50,
             decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.white,
+                  color: Colors.deepPurple,
                   width: 1.0,
                 ),
                 borderRadius: BorderRadius.circular(10)),
@@ -45,17 +50,18 @@ class InputField extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    onChanged: onChanged,
+                    validator: validator,
                     initialValue: initialValue,
                     maxLength: maxlength,
                     keyboardType: inputType,
                     readOnly: widget == null ? false : true,
                     decoration: InputDecoration(
-                        hintText: hint,
-                        focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white))),
+                      hintText: hint,
+                    ),
                     controller: controller,
                     autofocus: false,
-                    cursorColor: Colors.white,
+                    cursorColor: Colors.deepPurple,
                   ),
                 ),
                 widget == null

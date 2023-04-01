@@ -120,6 +120,7 @@ class _HomePageState extends State<HomePage> {
 
   final CollectionReference _petStrem =
       FirebaseFirestore.instance.collection('UserPost');
+
   @override
   void initState() {
     super.initState();
@@ -195,7 +196,9 @@ class _HomePageState extends State<HomePage> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: selectedAnimalIconIndex == 0 &&
                               searchedRegion == ""
-                          ? _petStrem.snapshots()
+                          ? _petStrem
+                              .orderBy("createdAt", descending: true)
+                              .snapshots()
                           : selectedAnimalIconIndex != 0 && searchedRegion == ""
                               ? _petStrem
                                   .where("type", isEqualTo: selectedType)
