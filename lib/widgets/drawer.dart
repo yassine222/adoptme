@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:adoptme/screens/add_pet_page.dart';
 import 'package:adoptme/screens/banned_page.dart';
@@ -50,59 +50,69 @@ class _DrawerPageState extends State<DrawerPage> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Theme.of(context).splashColor,
                 gradient: LinearGradient(
+                  colors: [
+                    Colors.deepPurple,
+                    Colors.purple,
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  stops: const [0.0, 1.0],
-                  colors: [
-                    Theme.of(context).primaryColor,
-                    Theme.of(context).colorScheme.secondary,
-                  ],
                 ),
               ),
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    FutureBuilder<DocumentSnapshot>(
-                        future: users.doc(user!.uid).get(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return Text("Something went wrong");
-                          }
+              child: FutureBuilder<DocumentSnapshot>(
+                  future: users.doc(user!.uid).get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Something went wrong");
+                    }
 
-                          if (snapshot.hasData && !snapshot.data!.exists) {
-                            return Text("Document does not exist");
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            Map<String, dynamic> data =
-                                snapshot.data!.data() as Map<String, dynamic>;
-                            return ListTile(
-                              leading: CircleAvatar(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.white,
+                    if (snapshot.hasData && !snapshot.data!.exists) {
+                      return Text("Document does not exist");
+                    }
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      Map<String, dynamic> data =
+                          snapshot.data!.data() as Map<String, dynamic>;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 40,
                                 backgroundImage:
                                     NetworkImage("${data['image']}"),
-                                radius: 30,
                               ),
-                              title: Text("${data['fullname']}"),
-                              subtitle: Text("${data['email']}"),
-                            );
-                          }
-                          return SizedBox();
-                        }),
-                    TextButton.icon(
-                      onPressed: () {
-                        Get.to(UpdateProfile());
-                      },
-                      icon: Icon(Icons.edit),
-                      label: Text("Edit Profile"),
-                    ),
-                  ],
-                ),
-              ),
+                              IconButton(
+                                icon: Icon(Icons.edit, color: Colors.white),
+                                onPressed: () {
+                                  Get.to(UpdateProfile());
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "${data['fullname']}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            "${data['email']}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                    return CircularProgressIndicator.adaptive();
+                  }),
             ),
             ListTile(
               leading: Icon(Icons.home,
@@ -190,7 +200,9 @@ class _DrawerPageState extends State<DrawerPage> {
                     fontSize: _drawerFontSize,
                     color: Theme.of(context).colorScheme.secondary),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.to(FavoritsPage());
+              },
             ),
             Divider(
               color: Theme.of(context).primaryColor,

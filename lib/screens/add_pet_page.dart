@@ -53,8 +53,8 @@ class _AddPetPageState extends State<AddPetPage> {
     getUserPostData(user!.uid);
     _petGender = 'male';
     _petAge = "1";
-    _petRegion = "tunis";
-    _petType = "dog";
+    _petRegion = "Tunis";
+    _petType = "Dog";
   }
 
   @override
@@ -360,7 +360,7 @@ class _AddPetPageState extends State<AddPetPage> {
       'id': userId,
       'adress': _ownerAdress,
       'ownerImage': _ownerImage,
-      'type': _petType!.toLowerCase(),
+      'type': _petType!.toLowerCase().capitalizeFirst,
       'docID': newDocId,
       'phone': _ownerPhone,
       "region": _petRegion,

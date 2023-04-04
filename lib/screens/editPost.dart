@@ -288,7 +288,7 @@ class _EditPostState extends State<EditPost> {
                                       padding: const EdgeInsets.fromLTRB(
                                           40, 10, 40, 10),
                                       child: Text(
-                                        "Post".toUpperCase(),
+                                        "Save".toUpperCase(),
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
