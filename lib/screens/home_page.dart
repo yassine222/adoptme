@@ -1,15 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:adoptme/screens/banned_page.dart';
 import 'package:adoptme/screens/details_page.dart';
 import 'package:adoptme/screens/set_profile_page.dart';
-import 'package:adoptme/services/favoriteService.dart';
 import 'package:adoptme/widgets/drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -31,13 +27,7 @@ class _HomePageState extends State<HomePage> {
   String selectedType = "All";
   bool? isbanned;
 
-  List<String> animalTypes = [
-    'All',
-    'cat',
-    'dog',
-    'Parrots',
-    'Fish',
-  ];
+  List<String> animalTypes = ['All', 'Cat', 'Dog', 'Parrots', 'Fish', "Other"];
 
   List<IconData> animalIcons = [
     FontAwesomeIcons.paw,
@@ -45,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     FontAwesomeIcons.dog,
     FontAwesomeIcons.crow,
     FontAwesomeIcons.fish,
+    FontAwesomeIcons.paw,
   ];
   Widget buildAnimalIcon(int index) {
     return Padding(
@@ -202,6 +193,7 @@ class _HomePageState extends State<HomePage> {
                           : selectedAnimalIconIndex != 0 && searchedRegion == ""
                               ? _petStrem
                                   .where("type", isEqualTo: selectedType)
+                                  .orderBy("createdAt", descending: true)
                                   .snapshots()
                               : selectedAnimalIconIndex != 0 &&
                                       searchedRegion != ""
@@ -218,6 +210,7 @@ class _HomePageState extends State<HomePage> {
                                       .snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
+                          print(snapshot.error.toString());
                           return Text('Something went wrong');
                         }
                         if (snapshot.connectionState ==

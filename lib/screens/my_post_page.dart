@@ -83,14 +83,18 @@ class _MyPostsPageState extends State<MyPostsPage> {
               height: 600,
               child: StreamBuilder<QuerySnapshot>(
                 stream: petName == ""
-                    ? _myPetStrem.where("id", isEqualTo: user!.uid).snapshots()
+                    ? _myPetStrem
+                        .where("id", isEqualTo: user!.uid)
+                        .orderBy("createdAt", descending: true)
+                        .snapshots()
                     : _myPetStrem
                         .where("id", isEqualTo: user!.uid)
                         .where("name", isEqualTo: petName)
                         .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return Text('Something went wrong');
+                    print(snapshot.error.toString());
+                    return Text(snapshot.error.toString());
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator.adaptive();
