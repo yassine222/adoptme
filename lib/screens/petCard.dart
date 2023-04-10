@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class PetCard extends StatelessWidget {
@@ -7,6 +9,7 @@ class PetCard extends StatelessWidget {
   final Function onDelete;
   final Function onUpdate;
   final Function onBookmark;
+  final bool isAdopted;
 
   const PetCard({
     Key? key,
@@ -16,6 +19,7 @@ class PetCard extends StatelessWidget {
     required this.onDelete,
     required this.onUpdate,
     required this.onBookmark,
+    required this.isAdopted,
   }) : super(key: key);
 
   @override
@@ -50,26 +54,40 @@ class PetCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(breed),
             const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: onDelete as void Function()?,
-                  icon: const Icon(Icons.delete),
-                  color: Colors.red,
-                ),
-                IconButton(
-                  onPressed: onUpdate as void Function()?,
-                  icon: const Icon(Icons.edit),
-                  color: Colors.blue,
-                ),
-                IconButton(
-                  onPressed: onBookmark as void Function()?,
-                  icon: const Icon(Icons.bookmark),
-                  color: Colors.green,
-                ),
-              ],
-            ),
+            isAdopted
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Adopted",
+                        style: TextStyle(color: Colors.deepPurple),
+                      ),
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.deepPurple,
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: onDelete as void Function()?,
+                        icon: const Icon(Icons.delete),
+                        color: Colors.red,
+                      ),
+                      IconButton(
+                        onPressed: onUpdate as void Function()?,
+                        icon: const Icon(Icons.edit),
+                        color: Colors.blue,
+                      ),
+                      IconButton(
+                        onPressed: onBookmark as void Function()?,
+                        icon: const Icon(Icons.bookmark),
+                        color: Colors.green,
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),

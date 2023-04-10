@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:adoptme/screens/add_pet_page.dart';
 import 'package:adoptme/screens/explore_on_maps_page.dart';
+import 'package:adoptme/screens/favorites_page.dart';
 import 'package:adoptme/screens/messages_page.dart';
 import 'package:adoptme/screens/update_profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../screens/my_post_page.dart';
 import '../services/authService.dart';
 
 class DrawerPage extends StatefulWidget {
@@ -136,7 +139,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                // Get.to(AddPetPage());
+                Get.to(AddPetPage());
               },
             ),
             Divider(
@@ -154,7 +157,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                // Get.to(MyPostsPage());
+                Get.to(MyPostsPage());
               },
             ),
             Divider(
@@ -194,7 +197,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                // Get.to(FavoritsPage());
+                Get.to(FavoritsPage());
               },
             ),
             Divider(
