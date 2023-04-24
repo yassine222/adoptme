@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:adoptme/screens/BlogFeed.dart';
 import 'package:adoptme/screens/add_pet_page.dart';
 import 'package:adoptme/screens/explore_on_maps_page.dart';
 import 'package:adoptme/screens/favorites_page.dart';
+import 'package:adoptme/screens/login_page.dart';
 import 'package:adoptme/screens/messages_page.dart';
 import 'package:adoptme/screens/update_profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,11 +25,18 @@ class DrawerPage extends StatefulWidget {
 class _DrawerPageState extends State<DrawerPage> {
   final double _drawerIconSize = 24;
   final double _drawerFontSize = 17;
-  final User? user = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     CollectionReference users =
         FirebaseFirestore.instance.collection('UserProfile');
+
     return Drawer(
       child: Container(
         decoration: BoxDecoration(
@@ -56,59 +65,59 @@ class _DrawerPageState extends State<DrawerPage> {
                 ),
               ),
               child: FutureBuilder<DocumentSnapshot>(
-                  future: users.doc(user!.uid).get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Something went wrong");
-                    }
+                future: users.doc(user!.uid).get(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Something went wrong");
+                  }
 
-                    if (snapshot.hasData && !snapshot.data!.exists) {
-                      return Text("Document does not exist");
-                    }
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      Map<String, dynamic> data =
-                          snapshot.data!.data() as Map<String, dynamic>;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage:
-                                    NetworkImage("${data['image']}"),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.edit, color: Colors.white),
-                                onPressed: () {
-                                  Get.to(UpdateProfile());
-                                },
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "${data['fullname']}",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                  if (snapshot.hasData && !snapshot.data!.exists) {
+                    return Text("Document does not exist");
+                  }
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage("${data['image']}"),
                             ),
-                          ),
-                          Text(
-                            "${data['email']}",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white70,
+                            IconButton(
+                              icon: Icon(Icons.edit, color: Colors.white),
+                              onPressed: () {
+                                Get.to(UpdateProfile());
+                              },
                             ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "${data['fullname']}",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                        ],
-                      );
-                    }
-                    return CircularProgressIndicator.adaptive();
-                  }),
+                        ),
+                        Text(
+                          "${data['email']}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return CircularProgressIndicator.adaptive();
+                },
+              ),
             ),
             ListTile(
               leading: Icon(Icons.home,
@@ -171,7 +180,7 @@ class _DrawerPageState extends State<DrawerPage> {
                 color: Theme.of(context).colorScheme.secondary,
               ),
               title: Text(
-                'Explore nearby Pets',
+                'Explore On Maps',
                 style: TextStyle(
                     fontSize: _drawerFontSize,
                     color: Theme.of(context).colorScheme.secondary),
@@ -198,6 +207,29 @@ class _DrawerPageState extends State<DrawerPage> {
               ),
               onTap: () {
                 Get.to(FavoritsPage());
+              },
+            ),
+            Divider(
+              color: Theme.of(context).primaryColor,
+              height: 1,
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.tips_and_updates_sharp,
+                size: _drawerIconSize,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              title: Text(
+                'Tips',
+                style: TextStyle(
+                    fontSize: _drawerFontSize,
+                    color: Theme.of(context).colorScheme.secondary),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewsPage()),
+                );
               },
             ),
             Divider(
@@ -247,5 +279,12 @@ class _DrawerPageState extends State<DrawerPage> {
         ),
       ),
     );
+  }
+
+  Stream<DocumentSnapshot> getUserProfileStream(String uid) {
+    return FirebaseFirestore.instance
+        .collection('UserProfile')
+        .doc(uid)
+        .snapshots();
   }
 }

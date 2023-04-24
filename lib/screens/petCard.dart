@@ -1,25 +1,37 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:adoptme/screens/editPost.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PetCard extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String breed;
-  final Function onDelete;
+  final Function diactivate;
+  final Function activate;
+
   final Function onUpdate;
   final Function onBookmark;
   final bool isAdopted;
+  final bool isActive;
+  final String postStaus;
+  final DocumentSnapshot documentSnapshot;
 
   const PetCard({
     Key? key,
     required this.imageUrl,
     required this.name,
     required this.breed,
-    required this.onDelete,
+    required this.diactivate,
     required this.onUpdate,
     required this.onBookmark,
     required this.isAdopted,
+    required this.postStaus,
+    required this.isActive,
+    required this.activate,
+    required this.documentSnapshot,
   }) : super(key: key);
 
   @override
@@ -68,26 +80,83 @@ class PetCard extends StatelessWidget {
                       ),
                     ],
                   )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: onDelete as void Function()?,
-                        icon: const Icon(Icons.delete),
-                        color: Colors.red,
-                      ),
-                      IconButton(
-                        onPressed: onUpdate as void Function()?,
-                        icon: const Icon(Icons.edit),
-                        color: Colors.blue,
-                      ),
-                      IconButton(
-                        onPressed: onBookmark as void Function()?,
-                        icon: const Icon(Icons.bookmark),
-                        color: Colors.green,
-                      ),
-                    ],
-                  ),
+                : postStaus == "waiting"
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton.icon(
+                            label: Text("Pending "),
+                            onPressed: () {
+                              Get.snackbar("Pending",
+                                  "Please wait for admin approval of your post. Thank you.",
+                                  icon: Icon(
+                                    Icons.warning_amber_rounded,
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  snackPosition: SnackPosition.BOTTOM);
+                            },
+                            icon: Icon(
+                              Icons.error,
+                              size: 35,
+                            ),
+                          ),
+                        ],
+                      )
+                    : postStaus == "no"
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton.icon(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
+                                label: Text(
+                                  "Not Approved",
+                                  style: TextStyle(color: Colors.deepPurple),
+                                ),
+                              ),
+                              TextButton.icon(
+                                onPressed: () {
+                                  Get.to(EditPost(
+                                      documentSnapshot: documentSnapshot));
+                                },
+                                icon: Icon(
+                                  Icons.replay,
+                                  color: Colors.deepPurple,
+                                ),
+                                label: Text(
+                                  "Repost",
+                                  style: TextStyle(color: Colors.deepPurple),
+                                ),
+                              )
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: isActive
+                                    ? diactivate as void Function()?
+                                    : activate as void Function()?,
+                                icon: isActive
+                                    ? Icon(Icons.visibility)
+                                    : Icon(Icons.visibility_off),
+                                color: isActive ? Colors.green : Colors.red,
+                              ),
+                              IconButton(
+                                onPressed: onUpdate as void Function()?,
+                                icon: const Icon(Icons.edit),
+                                color: Colors.blue,
+                              ),
+                              IconButton(
+                                onPressed: onBookmark as void Function()?,
+                                icon: const Icon(Icons.bookmark),
+                                color: Colors.green,
+                              ),
+                            ],
+                          ),
           ],
         ),
       ),

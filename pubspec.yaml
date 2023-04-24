@@ -52,6 +52,15 @@ dependencies:
   expandable_text: ^2.3.0
   flutter_facebook_auth: ^5.0.8
   dropdown_button2: ^2.0.0
+  google_maps_flutter: ^2.2.5
+  geolocator: ^9.0.2
+  fluttericon: ^2.0.0
+  url_launcher: ^6.1.10
+  maps_launcher: ^2.2.0
+  flutter_spinkit: ^5.1.0
+  atomsbox: ^0.1.0
+  carousel_slider: ^4.2.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

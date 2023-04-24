@@ -169,6 +169,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   decoration:
                                       ThemeHelper().inputBoxDecorationShaddow(),
                                   child: TextFormField(
+                                    maxLength: 8,
                                     initialValue: '${data['phone']}',
                                     onChanged: (value) {
                                       phone = value;

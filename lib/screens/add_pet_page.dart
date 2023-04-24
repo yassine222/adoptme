@@ -13,6 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -31,7 +32,10 @@ class _AddPetPageState extends State<AddPetPage> {
   final _formKey = GlobalKey<FormState>();
   File? image;
   // Owner Infos
-
+// ignore: prefer_final_fields
+  LatLng _initialcameraposition = const LatLng(36.897698, 10.190076);
+  LatLng _lastPosition = LatLng(0.0, 0.0);
+  Set<Marker> _markers = {};
   String? _ownerImage;
   String? _ownerName;
   String? _ownerID;
@@ -192,6 +196,48 @@ class _AddPetPageState extends State<AddPetPage> {
                                 },
                               ),
                             ),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Get.bottomSheet(
+                                      Card(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadiusDirectional
+                                                    .circular(
+                                              40,
+                                            ),
+                                          ),
+                                          child: GestureDetector(
+                                            child: GoogleMap(
+                                              onLongPress: _addMarker,
+                                              markers: _markers,
+                                              mapType: MapType.normal,
+                                              onCameraMove:
+                                                  (CameraPosition position) {
+                                                _lastPosition = position.target;
+                                              },
+                                              initialCameraPosition:
+                                                  CameraPosition(
+                                                      target:
+                                                          _initialcameraposition,
+                                                      zoom: 14),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.location_on,
+                                      color: Colors.deepPurple),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                         Container(
@@ -387,5 +433,16 @@ class _AddPetPageState extends State<AddPetPage> {
     } else {
       throw Exception('Post with ID $userID does not exist.');
     }
+  }
+
+  void _addMarker(LatLng point) {
+    setState(() {
+      _markers.clear();
+      _markers.add(Marker(
+        markerId: MarkerId(_lastPosition.toString()),
+        position: point,
+      ));
+      _lastPosition = point;
+    });
   }
 }

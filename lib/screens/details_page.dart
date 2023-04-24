@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:adoptme/widgets/drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../services/favoriteService.dart';
 
@@ -25,10 +26,20 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  late String phone;
+  bool hasCallSupport = false;
+  Future<void>? launched;
+  String phone = '';
   static const kPrimaryLightColor = Color(0xFFF1E6FF);
   List<String> favoriteList = [];
   final user = FirebaseAuth.instance.currentUser;
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
 
   Widget _buildInfoCard(String label, String info) {
     return Container(
@@ -258,7 +269,9 @@ class _DetailPageState extends State<DetailPage> {
                     decoration: ThemeHelper().buttonBoxDecoration(context),
                     child: ElevatedButton.icon(
                       style: ThemeHelper().buttonStyle(),
-                      onPressed: () {},
+                      onPressed: () {
+                        _makePhoneCall(widget.documentSnapshot["description"]);
+                      },
                       icon: Icon(
                         Icons.call,
                       ),

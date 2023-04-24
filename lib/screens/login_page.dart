@@ -1,3 +1,4 @@
+import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/signup_page.dart';
 import 'package:adoptme/services/authService.dart';
 import 'package:adoptme/theme/theme_helper.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import '../main.dart';
@@ -144,10 +146,12 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
-                                      AuthService().SignIn(
-                                          context,
-                                          emailController.text.trim(),
-                                          passwordController.text.trim());
+                                      AuthService()
+                                          .SignIn(
+                                              context,
+                                              emailController.text.trim(),
+                                              passwordController.text.trim())
+                                          .then((value) => Get.to(HomePage()));
                                     }
                                   },
                                 ),
@@ -191,7 +195,9 @@ class _LoginPageState extends State<LoginPage> {
                                   color: HexColor("#3E529C"),
                                 ),
                                 onTap: () {
-                                  AuthService().SignInWithFacebook(context);
+                                  AuthService()
+                                      .SignInWithFacebook(context)
+                                      .then((value) => Get.to(HomePage()));
                                 },
                               ),
                             ],

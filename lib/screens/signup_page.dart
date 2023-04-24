@@ -29,6 +29,9 @@ class _SignupPageState extends State<SignupPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController adresseController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
   @override
@@ -40,21 +43,28 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: _headerHeight,
-              child: HeaderWidget(
-                  _headerHeight,
-                  true,
-                  const AssetImage(
-                      "assets/images/logo.png")), //let's create a common header widget
-            ),
-            SafeArea(
-              child: Container(
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: _headerHeight,
+                child: HeaderWidget(
+                    _headerHeight,
+                    true,
+                    const AssetImage(
+                        "assets/images/logo.png")), //let's create a common header widget
+              ),
+              Container(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                   margin: const EdgeInsets.fromLTRB(
                       20, 0, 20, 10), // This will be the login form
@@ -75,6 +85,42 @@ class _SignupPageState extends State<SignupPage> {
                           key: _formKey,
                           child: Column(
                             children: [
+                              Container(
+                                decoration:
+                                    ThemeHelper().inputBoxDecorationShaddow(),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'username field must not be empty';
+                                    }
+                                    return null;
+                                  },
+                                  controller: userNameController,
+                                  decoration: ThemeHelper().textInputDecoration(
+                                      'User Name', 'Enter your user name'),
+                                ),
+                              ),
+                              const SizedBox(height: 20.0),
+                              Container(
+                                decoration:
+                                    ThemeHelper().inputBoxDecorationShaddow(),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.phone,
+                                  maxLength: 8,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Phone field must not be empty';
+                                    }
+                                    return null;
+                                  },
+                                  controller: phoneController,
+                                  decoration: ThemeHelper().textInputDecoration(
+                                      'Phone Number',
+                                      'Enter your phone number'),
+                                ),
+                              ),
+                              const SizedBox(height: 20.0),
                               Container(
                                 decoration:
                                     ThemeHelper().inputBoxDecorationShaddow(),
@@ -150,9 +196,12 @@ class _SignupPageState extends State<SignupPage> {
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       AuthService().SignUp(
-                                          context,
-                                          emailController.text.trim(),
-                                          passwordController.text.trim());
+                                        context,
+                                        emailController.text.trim(),
+                                        passwordController.text.trim(),
+                                        userNameController.text.trim(),
+                                        phoneController.text.trim(),
+                                      );
                                     }
                                   },
                                 ),
@@ -178,32 +227,32 @@ class _SignupPageState extends State<SignupPage> {
                                   ),
                                 ])),
                               ),
-                              const Text(
-                                "Or create account using social media",
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              GestureDetector(
-                                child: FaIcon(
-                                  FontAwesomeIcons.facebook,
-                                  size: 35,
-                                  color: HexColor("#3E529C"),
-                                ),
-                                onTap: () {
-                                  AuthService()
-                                      .SignInWithFacebook(context)
-                                      .then(
-                                          (value) => Get.to(const HomePage()));
-                                },
-                              ),
+                              // const Text(
+                              //   "Or create account using social media",
+                              //   style: TextStyle(color: Colors.grey),
+                              // ),
+                              // const SizedBox(
+                              //   height: 20,
+                              // ),
+                              // GestureDetector(
+                              //   child: FaIcon(
+                              //     FontAwesomeIcons.facebook,
+                              //     size: 35,
+                              //     color: HexColor("#3E529C"),
+                              //   ),
+                              //   onTap: () {
+                              //     AuthService()
+                              //         .SignInWithFacebook(context)
+                              //         .then(
+                              //             (value) => Get.to(const HomePage()));
+                              //   },
+                              // ),
                             ],
                           )),
                     ],
                   )),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

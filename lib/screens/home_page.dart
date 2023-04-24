@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:adoptme/screens/banned_page.dart';
 import 'package:adoptme/screens/details_page.dart';
 import 'package:adoptme/screens/set_profile_page.dart';
 import 'package:adoptme/widgets/drawer.dart';
+import 'package:adoptme/widgets/loadingwidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -83,219 +85,246 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  checkIfDocExists() async {
-    try {
-      // Get reference to Firestore collection
-      var collectionRef = FirebaseFirestore.instance.collection('UserProfile');
-
-      var doc = await collectionRef.doc(user!.uid).get();
-      if (doc.exists == true) {
-        setState(() {
-          profileExist = true;
-        });
-      } else {
-        setState(() {
-          profileExist = false;
-        });
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  void _updateProfileExist() {
-    setState(() {
-      checkIfDocExists();
-    });
-  }
-
   final CollectionReference _petStrem =
       FirebaseFirestore.instance.collection('UserPost');
 
-  @override
-  void initState() {
-    super.initState();
-    checkIfDocExists();
+  Stream<bool> isUserBanned(String userId) {
+    // Get the reference to the user's document in the UserProfile collection
+    final userProfileRef =
+        FirebaseFirestore.instance.collection('UserProfile').doc(userId);
+
+    // Create a stream of snapshots of the user's document
+    return userProfileRef.snapshots().map((snapshot) {
+      // Check if the snapshot contains any data
+      if (!snapshot.exists) {
+        // If the document does not exist, assume the user is not banned
+        return false;
+      }
+
+      // Get the value of the isBanned field from the snapshot
+      final isBanned = snapshot['isbanned'];
+
+      // Return the value of the isBanned field
+      return isBanned;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return profileExist == true
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text("Home"),
-            ),
-            drawer: DrawerPage(),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 20.0,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      padding: EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.search,
-                            color: Colors.grey,
-                          ),
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {
-                                searchedRegion = value;
-                                setState(() {
-                                  searchedRegion = value;
-                                });
-                              },
-                              style: TextStyle(fontSize: 18.0),
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none),
-                                  hintText: 'Search pets by region'),
+    return StreamBuilder<bool>(
+        stream: isUserBanned(user!.uid),
+        builder: (context, snapshot) {
+          if (snapshot.data == true) {
+            return BannedPage();
+          } else {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("Home"),
+              ),
+              drawer: DrawerPage(),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 20.0,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20.0)),
+                        padding: EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.search,
+                              color: Colors.grey,
                             ),
-                          ),
-                          Icon(
-                            FontAwesomeIcons.filter,
-                            color: Colors.grey,
-                          ),
-                        ],
+                            Expanded(
+                              child: TextField(
+                                onChanged: (value) {
+                                  searchedRegion = value;
+                                  setState(() {
+                                    searchedRegion = value;
+                                  });
+                                },
+                                style: TextStyle(fontSize: 18.0),
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    hintText: 'Search pets by region'),
+                              ),
+                            ),
+                            Icon(
+                              FontAwesomeIcons.filter,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 120.0,
-                    child: ListView.builder(
-                      padding: EdgeInsets.only(
-                        left: 24.0,
-                        top: 8.0,
+                    SizedBox(
+                      height: 120.0,
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(
+                          left: 24.0,
+                          top: 8.0,
+                        ),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: animalTypes.length,
+                        itemBuilder: (context, index) {
+                          return buildAnimalIcon(index);
+                        },
                       ),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: animalTypes.length,
-                      itemBuilder: (context, index) {
-                        return buildAnimalIcon(index);
-                      },
                     ),
-                  ),
-                  SizedBox(
-                    height: 500,
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: selectedAnimalIconIndex == 0 &&
-                              searchedRegion == ""
-                          ? _petStrem
-                              .where("isadopted", isEqualTo: false)
-                              .orderBy("createdAt", descending: true)
-                              .snapshots()
-                          : selectedAnimalIconIndex != 0 && searchedRegion == ""
-                              ? _petStrem
-                                  .where("type", isEqualTo: selectedType)
-                                  .where("isadopted", isEqualTo: false)
-                                  .orderBy("createdAt", descending: true)
-                                  .snapshots()
-                              : selectedAnimalIconIndex != 0 &&
-                                      searchedRegion != ""
-                                  ? _petStrem
-                                      .where("region",
-                                          isEqualTo: searchedRegion)
-                                      .where("type", isEqualTo: selectedType)
-                                      .where("isadopted", isEqualTo: false)
-                                      .orderBy("createdAt", descending: true)
-                                      .snapshots()
-                                  : _petStrem
-                                      .where("region",
-                                          isEqualTo: searchedRegion)
-                                      .orderBy("createdAt", descending: true)
-                                      .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          print(snapshot.error.toString());
-                          return Text('Something went wrong');
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator.adaptive();
-                        }
+                    SizedBox(
+                      height: 500,
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: selectedAnimalIconIndex == 0 &&
+                                searchedRegion == ""
+                            ? _petStrem
+                                .where("isadopted", isEqualTo: false)
+                                .where("isApproved", isEqualTo: "yes")
+                                .orderBy("createdAt", descending: true)
+                                .snapshots()
+                            : selectedAnimalIconIndex != 0 &&
+                                    searchedRegion == ""
+                                ? _petStrem
+                                    .where("type", isEqualTo: selectedType)
+                                    .where("isadopted", isEqualTo: false)
+                                    .where("isApproved", isEqualTo: "yes")
+                                    .orderBy("createdAt", descending: true)
+                                    .snapshots()
+                                : selectedAnimalIconIndex != 0 &&
+                                        searchedRegion != ""
+                                    ? _petStrem
+                                        .where("region",
+                                            isEqualTo: searchedRegion)
+                                        .where("type", isEqualTo: selectedType)
+                                        .where("isadopted", isEqualTo: false)
+                                        .where("isApproved", isEqualTo: "yes")
+                                        .orderBy("createdAt", descending: true)
+                                        .snapshots()
+                                    : _petStrem
+                                        .where("region",
+                                            isEqualTo: searchedRegion)
+                                        .where("isadopted")
+                                        .where("isApproved", isEqualTo: "yes")
+                                        .orderBy("createdAt", descending: true)
+                                        .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error.toString());
+                            return Text('Something went wrong');
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Loading2();
+                          }
 
-                        return ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final DocumentSnapshot documentSnapshot =
-                                snapshot.data!.docs[index];
+                          return ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final DocumentSnapshot documentSnapshot =
+                                  snapshot.data!.docs[index];
 
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  left: 40.0, bottom: 30.0, top: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.to(DetailPage(
-                                          documentSnapshot: documentSnapshot));
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 250.0,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20.0),
-                                          bottomLeft: Radius.circular(20.0),
-                                        ),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              documentSnapshot["image"]),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        12.0, 12.0, 40.0, 0.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          documentSnapshot["name"],
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 24.0,
-                                            fontWeight: FontWeight.bold,
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    left: 40.0, bottom: 30.0, top: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(DetailPage(
+                                            documentSnapshot:
+                                                documentSnapshot));
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 250.0,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20.0),
+                                            bottomLeft: Radius.circular(20.0),
+                                          ),
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                                documentSnapshot["image"]),
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        12.0, 0.0, 40.0, 12.0),
-                                    child: Text(
-                                      documentSnapshot["breed"],
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 16.0,
-                                        color: Colors.grey,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          12.0, 12.0, 40.0, 0.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            documentSnapshot["name"],
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 24.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          documentSnapshot["isApproved"] ==
+                                                      "waiting" &&
+                                                  documentSnapshot["id"] ==
+                                                      user!.uid
+                                              ? TextButton.icon(
+                                                  label: Text("Pending "),
+                                                  onPressed: () {
+                                                    Get.snackbar("Pending",
+                                                        "Please wait for admin approval of your post. Thank you.",
+                                                        icon: Icon(
+                                                          Icons
+                                                              .warning_amber_rounded,
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.error,
+                                                    size: 35,
+                                                  ),
+                                                )
+                                              : SizedBox(),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          12.0, 0.0, 40.0, 12.0),
+                                      child: Text(
+                                        documentSnapshot["breed"],
+                                        style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 16.0,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          )
-        : SetProfile();
+            );
+          }
+        });
   }
 }

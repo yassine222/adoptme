@@ -1,8 +1,10 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:ffi';
 
 import 'package:adoptme/main.dart';
+import 'package:adoptme/screens/login_page.dart';
+import 'package:adoptme/screens/verification_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,8 @@ import 'package:get/get.dart';
 class AuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future SignUp(BuildContext context, String email, String password) async {
+  Future SignUp(BuildContext context, String email, String password,
+      String username, String phone) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -21,10 +24,28 @@ class AuthService {
       ),
     );
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      FirebaseFirestore.instance
+          .collection('UserProfile')
+          .doc(userCredential.user!.uid)
+          .set({
+        'fullname': username,
+        'email': userCredential.user!.email,
+        'phone': phone,
+        'image':
+            "https://cdn4.iconfinder.com/data/icons/evil-icons-user-interface/64/avatar-512.png",
+        'adresse': "",
+        'isbanned': false,
+        'strike': 0,
+        "createdAT": Timestamp.now(),
+      }).then((value) async {
+        print("profile updated");
+      }).catchError((error) => print("Failed to add user: $error"));
+      Get.to(VerificationPage());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
@@ -58,7 +79,13 @@ class AuthService {
   }
 
   Future<void> LogOut() async {
-    await FirebaseAuth.instance.signOut();
+    try {
+      await FirebaseAuth.instance
+          .signOut()
+          .then((value) => Get.to(LoginPage()));
+    } catch (e) {
+      print('Error signing out: $e');
+    }
   }
 
   Future sendVerificationEmail() async {

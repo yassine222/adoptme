@@ -381,6 +381,7 @@ class _EditPostState extends State<EditPost> {
       'age': _petAge.toString(),
       'type': _petType!.toLowerCase().capitalizeFirst,
       "region": _petRegion!.toLowerCase().capitalizeFirst,
+      "isApproved": "waiting",
     });
   }
 }

@@ -1,17 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:adoptme/main.dart';
 import 'package:adoptme/screens/editPost.dart';
-import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/petCard.dart';
-import 'package:adoptme/widgets/button.dart';
-import 'package:adoptme/widgets/drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-import 'details_page.dart';
 
 class MyPostsPage extends StatefulWidget {
   const MyPostsPage({super.key});
@@ -24,12 +19,15 @@ class _MyPostsPageState extends State<MyPostsPage> {
   String petName = "";
   final CollectionReference _myPetStrem =
       FirebaseFirestore.instance.collection('UserPost');
+  final User? user = FirebaseAuth.instance.currentUser;
 
   bool isPressed1 = true;
   bool isPressed2 = false;
   @override
   void initState() {
     isPressed1 = true;
+    String curentUser = user!.uid;
+
     super.initState();
   }
 
@@ -190,29 +188,63 @@ class _MyPostsPageState extends State<MyPostsPage> {
                           snapshot.data!.docs[index];
 
                       return PetCard(
+                          documentSnapshot: documentSnapshot,
                           isAdopted: documentSnapshot["isadopted"],
                           imageUrl: documentSnapshot["image"],
                           name: documentSnapshot["name"],
                           breed: documentSnapshot["breed"],
-                          onDelete: () {
+                          postStaus: documentSnapshot["isApproved"],
+                          isActive: documentSnapshot["isactive"],
+                          activate: () {
+                            if (documentSnapshot["isactive"] == false) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text('Activate Post'),
+                                  content: Text('Reactivate Your Post ?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('No'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        activatePost(documentSnapshot.id).then(
+                                            (value) => Navigator.pop(context));
+                                      },
+                                      child: Text('Yes'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                          diactivate: () {
                             if (documentSnapshot["isactive"] == true) {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text('Désactiver annonce'),
+                                  title: Text('Diactivate Post'),
                                   content: Text(
-                                      'Votre animal a éte adopté grace a RescueMe ?'),
+                                      'is your Pet adopted through AdopteMe OR diactivate for other reasons ?'),
                                   actions: <Widget>[
                                     TextButton(
-                                      onPressed: () {},
-                                      child: Text('Non, désactiver annonce'),
+                                      onPressed: () {
+                                        diactivatePost(documentSnapshot.id)
+                                            .then((value) =>
+                                                Navigator.pop(context));
+                                      },
+                                      child: Text('No (Other Reason)'),
                                     ),
                                     TextButton(
                                       onPressed: () {
+                                        diactivatePost(documentSnapshot.id);
                                         isadopted(documentSnapshot.id).then(
                                             (value) => Navigator.pop(context));
                                       },
-                                      child: Text('Oui'),
+                                      child: Text('Yes (AdopteMe)'),
                                     ),
                                   ],
                                 ),
@@ -251,5 +283,19 @@ class _MyPostsPageState extends State<MyPostsPage> {
         .collection('UserPost')
         .doc(postId)
         .update({'isadopted': true});
+  }
+
+  Future<void> diactivatePost(String postId) {
+    return FirebaseFirestore.instance
+        .collection('UserPost')
+        .doc(postId)
+        .update({'isactive': false});
+  }
+
+  Future<void> activatePost(String postId) {
+    return FirebaseFirestore.instance
+        .collection('UserPost')
+        .doc(postId)
+        .update({'isactive': true});
   }
 }

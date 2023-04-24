@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tekup.adoptme">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <queries>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
@@ -13,6 +16,8 @@
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
    	    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDgIRCFleNlz9tjNds4iMXHy95Yl14cHKI"/>
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
