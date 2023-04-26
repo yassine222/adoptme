@@ -5,8 +5,10 @@ import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/verification_page.dart';
 import 'package:adoptme/screens/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
@@ -14,6 +16,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
+  // runApp(
+  //   DevicePreview(
+  //     enabled: true,
+  //     builder: (context) => MyApp(), // Wrap your app
+  //   ),
+  // );
 }
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -32,6 +40,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      // useInheritedMediaQuery: true,
+      // locale: DevicePreview.locale(context),
+      // builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
       title: 'Pets Adoption App',
       navigatorKey: navigatorkey,

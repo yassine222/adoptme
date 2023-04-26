@@ -1,7 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, prefer_const_constructors, use_build_context_synchronously
 
-import 'dart:ffi';
-
 import 'package:adoptme/main.dart';
 import 'package:adoptme/screens/login_page.dart';
 import 'package:adoptme/screens/verification_page.dart';

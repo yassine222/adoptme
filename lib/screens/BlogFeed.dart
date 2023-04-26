@@ -29,7 +29,7 @@ class _NewsPageState extends State<NewsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pet Health'),
+        title: const Text('Tips'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: blogStream.where("isPopular", isEqualTo: true).snapshots(),
