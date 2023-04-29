@@ -1,9 +1,9 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:adoptme/screens/editPost.dart';
-import 'package:adoptme/screens/petCard.dart';
+import 'package:adoptme/screens/petcard.dart';
+import 'package:adoptme/widgets/loadingwidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,6 @@ class _MyPostsPageState extends State<MyPostsPage> {
   @override
   void initState() {
     isPressed1 = true;
-    String curentUser = user!.uid;
 
     super.initState();
   }
@@ -35,9 +34,9 @@ class _MyPostsPageState extends State<MyPostsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Posts"),
+        title: const Text("My Posts"),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate to a custom route instead of the default route
             Navigator.pop(context);
@@ -48,7 +47,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 24.0,
                 vertical: 20.0,
               ),
@@ -56,10 +55,10 @@ class _MyPostsPageState extends State<MyPostsPage> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0)),
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.search,
                       color: Colors.grey,
                     ),
@@ -71,14 +70,14 @@ class _MyPostsPageState extends State<MyPostsPage> {
                             petName = value;
                           });
                         },
-                        style: TextStyle(fontSize: 18.0),
-                        decoration: InputDecoration(
+                        style: const TextStyle(fontSize: 18.0),
+                        decoration: const InputDecoration(
                             border:
                                 OutlineInputBorder(borderSide: BorderSide.none),
                             hintText: 'Search your pets by name'),
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.filter,
                       color: Colors.grey,
                     ),
@@ -102,8 +101,8 @@ class _MyPostsPageState extends State<MyPostsPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 20.0),
                   ),
                   child: Text(
                     "Active",
@@ -127,8 +126,8 @@ class _MyPostsPageState extends State<MyPostsPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15.0, horizontal: 20.0),
                   ),
                   child: Text(
                     "Adopted",
@@ -141,7 +140,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -174,11 +173,13 @@ class _MyPostsPageState extends State<MyPostsPage> {
                                 .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    print(snapshot.error.toString());
+                    if (kDebugMode) {
+                      print(snapshot.error.toString());
+                    }
                     return Text(snapshot.error.toString());
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator.adaptive();
+                    return Loading2();
                   }
 
                   return ListView.builder(
@@ -200,21 +201,21 @@ class _MyPostsPageState extends State<MyPostsPage> {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text('Activate Post'),
-                                  content: Text('Reactivate Your Post ?'),
+                                  title: const Text('Activate Post'),
+                                  content: const Text('Reactivate Your Post ?'),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: Text('No'),
+                                      child: const Text('No'),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         activatePost(documentSnapshot.id).then(
                                             (value) => Navigator.pop(context));
                                       },
-                                      child: Text('Yes'),
+                                      child: const Text('Yes'),
                                     ),
                                   ],
                                 ),
@@ -226,8 +227,8 @@ class _MyPostsPageState extends State<MyPostsPage> {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text('Diactivate Post'),
-                                  content: Text(
+                                  title: const Text('Diactivate Post'),
+                                  content: const Text(
                                       'is your Pet adopted through AdopteMe OR diactivate for other reasons ?'),
                                   actions: <Widget>[
                                     TextButton(
@@ -236,7 +237,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
                                             .then((value) =>
                                                 Navigator.pop(context));
                                       },
-                                      child: Text('No (Other Reason)'),
+                                      child: const Text('No (Other Reason)'),
                                     ),
                                     TextButton(
                                       onPressed: () {
@@ -244,7 +245,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
                                         isadopted(documentSnapshot.id).then(
                                             (value) => Navigator.pop(context));
                                       },
-                                      child: Text('Yes (AdopteMe)'),
+                                      child: const Text('Yes (AdopteMe)'),
                                     ),
                                   ],
                                 ),
@@ -272,9 +273,13 @@ class _MyPostsPageState extends State<MyPostsPage> {
           .collection('UserPost')
           .doc(postId)
           .delete();
-      print('Post deleted successfully');
+      if (kDebugMode) {
+        print('Post deleted successfully');
+      }
     } catch (error) {
-      print('Failed to delete post: $error');
+      if (kDebugMode) {
+        print('Failed to delete post: $error');
+      }
     }
   }
 

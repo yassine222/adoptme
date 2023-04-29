@@ -126,7 +126,7 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
                       ? dogIcon
                       : document['type'] == "Cat"
                           ? catIcon
-                          : document['type'] == "Parrots"
+                          : document['type'] == "Parrot"
                               ? parrotIcon
                               : document['type'] == "Fish"
                                   ? fishIcon

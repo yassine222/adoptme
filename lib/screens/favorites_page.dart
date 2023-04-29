@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:adoptme/screens/details_page.dart';
-import 'package:adoptme/screens/petCard.dart';
-import 'package:adoptme/services/favoriteService.dart';
-import 'package:adoptme/widgets/favoritePetWidget.dart';
+import 'package:adoptme/screens/petcard.dart';
+import 'package:adoptme/services/favoriteservice.dart';
+import 'package:adoptme/widgets/favoritepetwidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +26,7 @@ class _FavoritsPageState extends State<FavoritsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Favorites"),
-      ),
+      appBar: AppBar(title: const Text("Favorites")),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -98,8 +96,8 @@ class _FavoritsPageState extends State<FavoritsPage> {
                       final DocumentSnapshot favoritePet =
                           snapshot.data!.docs[index];
                       return GestureDetector(
-                        onTap: () =>
-                            Get.to(DetailPage(documentSnapshot: favoritePet)),
+                        onTap: () => Get.to(
+                            () => DetailPage(documentSnapshot: favoritePet)),
                         child: Card(
                           elevation: 5,
                           shape: RoundedRectangleBorder(

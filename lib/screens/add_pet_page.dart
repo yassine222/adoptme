@@ -1,15 +1,14 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:io';
 
 import 'package:adoptme/main.dart';
 import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/theme/theme_helper.dart';
-import 'package:adoptme/widgets/ageSelector_page.dart';
+import 'package:adoptme/widgets/ageselectorpage.dart';
 import 'package:adoptme/widgets/inputField.dart';
-import 'package:adoptme/widgets/petTypeSelector.dart';
+import 'package:adoptme/widgets/pettypeselector.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,48 +16,47 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-import '../widgets/regionSelector.dart';
+import '../widgets/regionselector.dart';
 
 class AddPetPage extends StatefulWidget {
+  const AddPetPage({super.key});
+
   @override
-  _AddPetPageState createState() => _AddPetPageState();
+  State<AddPetPage> createState() => _AddPetPageState();
 }
 
 class _AddPetPageState extends State<AddPetPage> {
   final TextEditingController petNameController = TextEditingController();
   final TextEditingController petBreedController = TextEditingController();
   final picker = ImagePicker();
-  var uuid = Uuid();
+  var uuid = const Uuid();
   final _formKey = GlobalKey<FormState>();
   File? image;
   // Owner Infos
 // ignore: prefer_final_fields
   LatLng _initialcameraposition = const LatLng(36.897698, 10.190076);
-  LatLng _lastPosition = LatLng(0.0, 0.0);
-  Set<Marker> _markers = {};
+  LatLng _lastPosition = const LatLng(0.0, 0.0);
+  final Set<Marker> _markers = {};
   String? _ownerImage;
   String? _ownerName;
-  String? _ownerID;
   String? _ownerPhone;
   String? _ownerAdress;
   // Pet Infos
   String? _imageUrl;
   String? _petType;
-  String? _petBreed;
   String? _petAge;
   String? _petGender;
-  String _petDescription = '';
+  final String _petDescription = '';
   String? _petRegion;
-  Timestamp _createdAt = Timestamp.now();
+  final Timestamp _createdAt = Timestamp.now();
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     getUserPostData(user!.uid);
     _petGender = 'male';
     _petAge = "1";
     _petRegion = "Tunis";
     _petType = "Dog";
+    super.initState();
   }
 
   @override
@@ -80,7 +78,7 @@ class _AddPetPageState extends State<AddPetPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add Pet'),
+          title: const Text('Add Pet'),
         ),
         body: SingleChildScrollView(
           child: Form(
@@ -99,7 +97,8 @@ class _AddPetPageState extends State<AddPetPage> {
                               ? FileImage(
                                   image!,
                                 )
-                              : AssetImage('assets/images/place_holder2.webp')
+                              : const AssetImage(
+                                      'assets/images/place_holder2.webp')
                                   as ImageProvider,
                           fit: BoxFit.cover,
                         ),
@@ -112,7 +111,7 @@ class _AddPetPageState extends State<AddPetPage> {
                       child: Center(
                         child: IconButton(
                           onPressed: () => pickImage(),
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.add_a_photo_outlined,
                             size: 30,
                           ),
@@ -122,16 +121,22 @@ class _AddPetPageState extends State<AddPetPage> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SingleChildScrollView(
                   child: Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
                         PetCategorie(
-                          type: ['Dog', 'Cat', 'Parrots', 'Fish', "Other"],
+                          type: const [
+                            'Dog',
+                            'Cat',
+                            'Parrots',
+                            'Fish',
+                            "Other"
+                          ],
                           initialType: "Dog",
                           onTypeSelected: (type) {
                             setState(() {
@@ -153,7 +158,7 @@ class _AddPetPageState extends State<AddPetPage> {
                                 },
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Expanded(
@@ -182,12 +187,17 @@ class _AddPetPageState extends State<AddPetPage> {
                                 },
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Expanded(
                               child: RegionSelector(
-                                regions: ['Tunis', 'Sfax', 'Sousse', 'Bizerte'],
+                                regions: const [
+                                  'Tunis',
+                                  'Sfax',
+                                  'Sousse',
+                                  'Bizerte'
+                                ],
                                 initialRegion: 'Tunis',
                                 onRegionSelected: (region) {
                                   setState(() {
@@ -198,7 +208,7 @@ class _AddPetPageState extends State<AddPetPage> {
                             ),
                             Column(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 50,
                                 ),
                                 IconButton(
@@ -233,7 +243,7 @@ class _AddPetPageState extends State<AddPetPage> {
                                       ),
                                     );
                                   },
-                                  icon: Icon(Icons.location_on,
+                                  icon: const Icon(Icons.location_on,
                                       color: Colors.deepPurple),
                                 ),
                               ],
@@ -245,9 +255,9 @@ class _AddPetPageState extends State<AddPetPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Pet Description",
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.deepPurple),
                               ),
                               Container(
@@ -260,7 +270,7 @@ class _AddPetPageState extends State<AddPetPage> {
                                       width: 1.0,
                                     ),
                                     borderRadius: BorderRadius.circular(10)),
-                                child: TextField(
+                                child: const TextField(
                                   decoration: InputDecoration(),
                                   keyboardType: TextInputType.multiline,
                                   maxLines: 5,
@@ -274,9 +284,9 @@ class _AddPetPageState extends State<AddPetPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Pet Gender",
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 16, color: Colors.deepPurple),
                               ),
                               Row(
@@ -292,7 +302,7 @@ class _AddPetPageState extends State<AddPetPage> {
                                       });
                                     },
                                   ),
-                                  Text('Male'),
+                                  const Text('Male'),
                                   Radio(
                                     value: 'female',
                                     groupValue: _petGender,
@@ -302,10 +312,10 @@ class _AddPetPageState extends State<AddPetPage> {
                                       });
                                     },
                                   ),
-                                  Text('Female'),
+                                  const Text('Female'),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Center(
@@ -319,7 +329,7 @@ class _AddPetPageState extends State<AddPetPage> {
                                           40, 10, 40, 10),
                                       child: Text(
                                         "Post".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -338,15 +348,15 @@ class _AddPetPageState extends State<AddPetPage> {
                                               snackPosition:
                                                   SnackPosition.BOTTOM);
                                         } else {
-                                          addUserPost(user!.uid).then(
-                                              (value) => Get.to(HomePage()));
+                                          addUserPost(user!.uid).then((value) =>
+                                              Get.to(() => const HomePage()));
                                         }
                                       }
                                     },
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               )
                             ],
@@ -377,14 +387,18 @@ class _AddPetPageState extends State<AddPetPage> {
         setState(() {
           _imageUrl = value;
         });
-        print(value);
+        if (kDebugMode) {
+          print(value);
+        }
       });
 
       setState(() {
         this.image = imageTemp;
       });
     } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
+      if (kDebugMode) {
+        print('Failed to pick image: $e');
+      }
     }
   }
 

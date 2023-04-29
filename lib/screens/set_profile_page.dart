@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/login_page.dart';
-import 'package:adoptme/services/authService.dart';
+import 'package:adoptme/services/authservice.dart';
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:adoptme/widgets/header_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,8 +16,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
-
-import 'profile_page.dart';
 
 class SetProfile extends StatefulWidget {
   const SetProfile({super.key});
@@ -219,7 +217,8 @@ class _SetProfileState extends State<SetProfile> {
                                       state.errorText ?? '',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                        color: Theme.of(context).errorColor,
+                                        color:
+                                            Theme.of(context).colorScheme.error,
                                         fontSize: 12,
                                       ),
                                     ),
@@ -255,8 +254,8 @@ class _SetProfileState extends State<SetProfile> {
                               ),
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  setProfile(user.uid)
-                                      .then((value) => Get.to(HomePage()));
+                                  setProfile(user.uid).then(
+                                      (value) => Get.to(() => HomePage()));
                                 }
                               },
                             ),
@@ -270,13 +269,14 @@ class _SetProfileState extends State<SetProfile> {
                                 text: 'Cancel',
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    AuthService()
-                                        .LogOut()
-                                        .then((value) => Get.to(LoginPage()));
+                                    AuthService().LogOut().then(
+                                        (value) => Get.to(() => LoginPage()));
                                   },
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).accentColor),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
                               ),
                             ])),
                           ),

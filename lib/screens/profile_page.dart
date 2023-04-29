@@ -12,9 +12,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final double _drawerIconSize = 24;
-  final double _drawerFontSize = 17;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   end: Alignment.bottomRight,
                   colors: <Color>[
                 Theme.of(context).primaryColor,
-                Theme.of(context).accentColor,
+                Theme.of(context).colorScheme.secondary,
               ])),
         ),
         actions: [

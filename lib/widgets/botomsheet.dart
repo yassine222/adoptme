@@ -73,7 +73,7 @@ class PetDetailsWidget extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    Get.to(DetailPage(documentSnapshot: snapshot));
+                    Get.to(() => DetailPage(documentSnapshot: snapshot));
                   },
                   icon: const Icon(Icons.visibility),
                   color: Colors.blue,

@@ -1,10 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:adoptme/screens/BlogFeed.dart';
 import 'package:adoptme/screens/add_pet_page.dart';
 import 'package:adoptme/screens/explore_on_maps_page.dart';
 import 'package:adoptme/screens/favorites_page.dart';
-import 'package:adoptme/screens/login_page.dart';
 import 'package:adoptme/screens/messages_page.dart';
 import 'package:adoptme/screens/update_profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../screens/my_post_page.dart';
-import '../services/authService.dart';
+import '../services/authservice.dart';
 
 class DrawerPage extends StatefulWidget {
   const DrawerPage({super.key});
@@ -54,7 +51,7 @@ class _DrawerPageState extends State<DrawerPage> {
         child: ListView(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
                     Colors.deepPurple,
@@ -68,11 +65,11 @@ class _DrawerPageState extends State<DrawerPage> {
                 future: users.doc(user!.uid).get(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return Text("Something went wrong");
+                    return const Text("Something went wrong");
                   }
 
                   if (snapshot.hasData && !snapshot.data!.exists) {
-                    return Text("Document does not exist");
+                    return const Text("Document does not exist");
                   }
                   if (snapshot.connectionState == ConnectionState.done) {
                     Map<String, dynamic> data =
@@ -89,17 +86,17 @@ class _DrawerPageState extends State<DrawerPage> {
                               backgroundImage: NetworkImage("${data['image']}"),
                             ),
                             IconButton(
-                              icon: Icon(Icons.edit, color: Colors.white),
+                              icon: const Icon(Icons.edit, color: Colors.white),
                               onPressed: () {
-                                Get.to(UpdateProfile());
+                                Get.to(() => const UpdateProfile());
                               },
                             ),
                           ],
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           "${data['fullname']}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -107,7 +104,7 @@ class _DrawerPageState extends State<DrawerPage> {
                         ),
                         Text(
                           "${data['email']}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.white70,
                           ),
@@ -115,7 +112,7 @@ class _DrawerPageState extends State<DrawerPage> {
                       ],
                     );
                   }
-                  return CircularProgressIndicator.adaptive();
+                  return const CircularProgressIndicator.adaptive();
                 },
               ),
             ),
@@ -148,7 +145,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Get.to(AddPetPage());
+                Get.to(() => const AddPetPage());
               },
             ),
             Divider(
@@ -166,7 +163,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Get.to(MyPostsPage());
+                Get.to(() => const MyPostsPage());
               },
             ),
             Divider(
@@ -186,7 +183,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Get.to(ExploreOnMaps());
+                Get.to(() => const ExploreOnMaps());
               },
             ),
             Divider(
@@ -206,7 +203,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Get.to(FavoritsPage());
+                Get.to(() => const FavoritsPage());
               },
             ),
             Divider(
@@ -226,10 +223,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NewsPage()),
-                );
+                Get.to(() => const NewsPage());
               },
             ),
             Divider(
@@ -249,10 +243,7 @@ class _DrawerPageState extends State<DrawerPage> {
                     color: Theme.of(context).colorScheme.secondary),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MessagesPage()),
-                );
+                Get.to(() => const MessagesPage());
               },
             ),
             Divider(

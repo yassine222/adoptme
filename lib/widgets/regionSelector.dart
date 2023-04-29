@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class RegionSelector extends StatefulWidget {
@@ -7,14 +5,15 @@ class RegionSelector extends StatefulWidget {
   final String initialRegion;
   final ValueChanged<String> onRegionSelected;
 
-  RegionSelector({
+  const RegionSelector({
+    super.key,
     required this.regions,
     required this.initialRegion,
     required this.onRegionSelected,
   });
 
   @override
-  _RegionSelectorState createState() => _RegionSelectorState();
+  State<RegionSelector> createState() => _RegionSelectorState();
 }
 
 class _RegionSelectorState extends State<RegionSelector> {
@@ -44,9 +43,9 @@ class _RegionSelectorState extends State<RegionSelector> {
     return Container(
         margin: const EdgeInsets.only(top: 16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const Text(
             "Region",
-            style: const TextStyle(fontSize: 16, color: Colors.deepPurple),
+            style: TextStyle(fontSize: 16, color: Colors.deepPurple),
           ),
           Container(
             margin: const EdgeInsets.only(top: 8.0),
@@ -65,11 +64,9 @@ class _RegionSelectorState extends State<RegionSelector> {
                 setState(() {
                   _currentRegion = value;
                 });
-                if (widget.onRegionSelected != null) {
-                  widget.onRegionSelected(value!);
-                }
+                widget.onRegionSelected(value!);
               },
-              decoration: InputDecoration(),
+              decoration: const InputDecoration(),
             ),
           )
         ]));

@@ -1,12 +1,12 @@
-import 'package:adoptme/screens/BlogDetails.dart';
 import 'package:atomsbox/atomsbox.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../widgets/categorieSelector.dart';
+import 'package:adoptme/screens/blogDetails.dart';
+
 import '../widgets/loadingwidget.dart';
 
 class NewsPage extends StatefulWidget {
@@ -35,7 +35,9 @@ class _NewsPageState extends State<NewsPage> {
         stream: blogStream.where("isPopular", isEqualTo: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error.toString());
+            if (kDebugMode) {
+              print(snapshot.error.toString());
+            }
             return const Text('Something went wrong');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -57,7 +59,8 @@ class _NewsPageState extends State<NewsPage> {
                     ),
                     carouselItems: tips.map((tip) {
                       return AppCardImageOverlay(
-                        onTap: () => Get.to(BlogDetails(documentSnapshot: tip)),
+                        onTap: () =>
+                            Get.to(() => BlogDetails(documentSnapshot: tip)),
                         type: AppCardType.elevated,
                         headline: AppText(
                           tip['headline'],
@@ -86,16 +89,23 @@ class _NewsPageState extends State<NewsPage> {
                                 .snapshots()
                             : _selectedCategory == "Parrot"
                                 ? blogStream
-                                    .where("categorie", isEqualTo: "Parrots")
+                                    .where("categorie", isEqualTo: "Parrot")
                                     .snapshots()
                                 : _selectedCategory == "Fish"
                                     ? blogStream
                                         .where("categorie", isEqualTo: "Fish")
                                         .snapshots()
-                                    : blogStream.snapshots(),
+                                    : _selectedCategory == "Other"
+                                        ? blogStream
+                                            .where("categorie",
+                                                isEqualTo: "Other")
+                                            .snapshots()
+                                        : blogStream.snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
-                        print(snapshot.error.toString());
+                        if (kDebugMode) {
+                          print(snapshot.error.toString());
+                        }
                         return const Text('Something went wrong');
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -146,7 +156,8 @@ class _NewsPageState extends State<NewsPage> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    Get.to(BlogDetails(documentSnapshot: xxx));
+                                    Get.to(() =>
+                                        BlogDetails(documentSnapshot: xxx));
                                   },
                                   child: Column(
                                     crossAxisAlignment:

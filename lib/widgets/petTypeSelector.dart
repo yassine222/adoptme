@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class PetCategorie extends StatefulWidget {
@@ -7,14 +5,15 @@ class PetCategorie extends StatefulWidget {
   final String initialType;
   final ValueChanged<String> onTypeSelected;
 
-  PetCategorie({
+  const PetCategorie({
+    super.key,
     required this.type,
     required this.initialType,
     required this.onTypeSelected,
   });
 
   @override
-  _PetCategorieState createState() => _PetCategorieState();
+  State<PetCategorie> createState() => _PetCategorieState();
 }
 
 class _PetCategorieState extends State<PetCategorie> {
@@ -65,9 +64,7 @@ class _PetCategorieState extends State<PetCategorie> {
                 setState(() {
                   _currentRegion = value;
                 });
-                if (widget.onTypeSelected != null) {
-                  widget.onTypeSelected(value!);
-                }
+                widget.onTypeSelected(value!);
               },
               decoration: InputDecoration(),
             ),

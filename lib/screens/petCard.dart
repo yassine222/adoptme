@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:adoptme/screens/editPost.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +67,7 @@ class PetCard extends StatelessWidget {
             isAdopted
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: const [
                       Text(
                         "Adopted",
                         style: TextStyle(color: Colors.deepPurple),
@@ -85,17 +83,17 @@ class PetCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton.icon(
-                            label: Text("Pending "),
+                            label: const Text("Pending "),
                             onPressed: () {
                               Get.snackbar("Pending",
                                   "Please wait for admin approval of your post. Thank you.",
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.warning_amber_rounded,
                                   ),
                                   backgroundColor: Colors.white,
                                   snackPosition: SnackPosition.BOTTOM);
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.error,
                               size: 35,
                             ),
@@ -108,25 +106,25 @@ class PetCard extends StatelessWidget {
                             children: [
                               TextButton.icon(
                                 onPressed: () {},
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.error,
                                   color: Colors.red,
                                 ),
-                                label: Text(
+                                label: const Text(
                                   "Not Approved",
                                   style: TextStyle(color: Colors.deepPurple),
                                 ),
                               ),
                               TextButton.icon(
                                 onPressed: () {
-                                  Get.to(EditPost(
+                                  Get.to(() => EditPost(
                                       documentSnapshot: documentSnapshot));
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.replay,
                                   color: Colors.deepPurple,
                                 ),
-                                label: Text(
+                                label: const Text(
                                   "Repost",
                                   style: TextStyle(color: Colors.deepPurple),
                                 ),
@@ -141,8 +139,8 @@ class PetCard extends StatelessWidget {
                                     ? diactivate as void Function()?
                                     : activate as void Function()?,
                                 icon: isActive
-                                    ? Icon(Icons.visibility)
-                                    : Icon(Icons.visibility_off),
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(Icons.visibility_off),
                                 color: isActive ? Colors.green : Colors.red,
                               ),
                               IconButton(

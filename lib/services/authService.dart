@@ -2,9 +2,10 @@
 
 import 'package:adoptme/main.dart';
 import 'package:adoptme/screens/login_page.dart';
-import 'package:adoptme/screens/verification_page.dart';
+import 'package:adoptme/screens/verificationpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
@@ -41,15 +42,21 @@ class AuthService {
         'strike': 0,
         "createdAT": Timestamp.now(),
       }).then((value) async {
-        print("profile updated");
-      }).catchError((error) => print("Failed to add user: $error"));
-      Get.to(VerificationPage());
+        if (kDebugMode) {
+          print("profile updated");
+        }
+      });
+      Get.to(() => VerificationPage());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        if (kDebugMode) {
+          print('The account already exists for that email.');
+        }
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     navigatorkey.currentState!.popUntil((route) => route.isFirst);
   }
@@ -80,10 +87,8 @@ class AuthService {
     try {
       await FirebaseAuth.instance
           .signOut()
-          .then((value) => Get.to(LoginPage()));
-    } catch (e) {
-      print('Error signing out: $e');
-    }
+          .then((value) => Get.to(() => LoginPage()));
+    } catch (e) {}
   }
 
   Future sendVerificationEmail() async {
@@ -119,7 +124,6 @@ class AuthService {
 
       Navigator.of(context).popUntil((route) => route.isFirst);
     } on FirebaseAuthException catch (e) {
-      print(e.message);
       Get.snackbar("Required", e.message.toString(),
           icon: const Icon(
             Icons.warning_amber_rounded,

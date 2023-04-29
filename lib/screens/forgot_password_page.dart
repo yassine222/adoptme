@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:adoptme/services/authService.dart';
+import 'package:adoptme/services/authservice.dart';
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:adoptme/widgets/header_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'verification_page.dart';
+import 'verificationpage.dart';
 import 'package:get/get.dart';
 
 import 'login_page.dart';
@@ -132,7 +132,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     AuthService()
                                         .ResetPassword(context,
                                             emailController.text.trim())
-                                        .then((value) => Get.to(LoginPage()));
+                                        .then((value) =>
+                                            Get.to(() => LoginPage()));
                                   }
                                 },
                               ),

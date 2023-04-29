@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:io';
 
 import 'package:adoptme/theme/theme_helper.dart';
@@ -7,11 +5,10 @@ import 'package:adoptme/widgets/header_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -36,7 +33,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   bool checkboxValue = false;
   String? imageUrl;
   File? image;
-  var uuid = Uuid();
+  var uuid = const Uuid();
   final user = FirebaseAuth.instance.currentUser!;
 
   @override
@@ -54,7 +51,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile"),
+        title: const Text("Edit Profile"),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -66,8 +63,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   150, false, AssetImage("assets/images/logo.png")),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(25, 50, 25, 10),
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               alignment: Alignment.center,
               child: Column(
                 children: [
@@ -75,11 +72,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       future: users.doc(user.uid).get(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
-                          return Text("Something went wrong");
+                          return const Text("Something went wrong");
                         }
 
                         if (snapshot.hasData && !snapshot.data!.exists) {
-                          return Text("Document does not exist");
+                          return const Text("Document does not exist");
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data =
@@ -92,18 +89,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   child: Stack(
                                     children: [
                                       Container(
-                                        padding: EdgeInsets.all(10),
+                                        padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           border: Border.all(
                                               width: 5, color: Colors.white),
                                           color: Colors.white,
-                                          boxShadow: [
+                                          boxShadow: const [
                                             BoxShadow(
                                               color: Colors.black12,
                                               blurRadius: 20,
-                                              offset: const Offset(5, 5),
+                                              offset: Offset(5, 5),
                                             ),
                                           ],
                                         ),
@@ -128,9 +125,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           pickImage();
                                         },
                                         child: Container(
-                                          padding:
-                                              EdgeInsets.fromLTRB(90, 90, 0, 0),
-                                          child: Icon(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              90, 90, 0, 0),
+                                          child: const Icon(
                                             Icons.add_circle,
                                             color: Colors.deepPurple,
                                             size: 25.0,
@@ -140,7 +137,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 30,
                                 ),
                                 Container(
@@ -155,7 +152,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                         .textInputDecoration(
                                             'User Name',
                                             'Enter your user name',
-                                            Icon(Icons.person)),
+                                            const Icon(Icons.person)),
                                     validator: (val) {
                                       if (val!.isEmpty) {
                                         return "Please enter your user name";
@@ -164,7 +161,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     },
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Container(
                                   decoration:
                                       ThemeHelper().inputBoxDecorationShaddow(),
@@ -178,11 +175,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                         .textInputDecoration(
                                             "Mobile Number",
                                             "Enter your mobile number",
-                                            Icon(Icons.phone)),
+                                            const Icon(Icons.phone)),
                                     keyboardType: TextInputType.phone,
                                   ),
                                 ),
-                                SizedBox(height: 20.0),
+                                const SizedBox(height: 20.0),
                                 Container(
                                   decoration:
                                       ThemeHelper().inputBoxDecorationShaddow(),
@@ -195,7 +192,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                         .textInputDecoration(
                                             "Address",
                                             "Enter your address",
-                                            Icon(Icons.pin_drop)),
+                                            const Icon(Icons.pin_drop)),
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         return 'Enter your address';
@@ -205,8 +202,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     },
                                   ),
                                 ),
-                                SizedBox(height: 15.0),
-                                SizedBox(height: 20.0),
+                                const SizedBox(height: 15.0),
+                                const SizedBox(height: 20.0),
                                 Container(
                                   decoration: ThemeHelper()
                                       .buttonBoxDecoration(context),
@@ -217,7 +214,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           40, 10, 40, 10),
                                       child: Text(
                                         "Save".toUpperCase(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -248,7 +245,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             ),
                           );
                         }
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       }),
                 ],
               ),
@@ -272,14 +269,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
         setState(() {
           imageUrl = value;
         });
-        print(value);
+        if (kDebugMode) {
+          print(value);
+        }
       });
 
       setState(() {
         this.image = imageTemp;
       });
     } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
+      if (kDebugMode) {
+        print('Failed to pick image: $e');
+      }
     }
   }
 
@@ -292,7 +293,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
       'image': imageUrl ?? curentPhoto,
       'adresse': adress ?? curentAdress
     }).then((value) async {
-      print("profile updated");
-    }).catchError((error) => print("Failed to add user: $error"));
+      if (kDebugMode) {
+        print("profile updated");
+      }
+      // ignore: avoid_print
+    });
   }
 }

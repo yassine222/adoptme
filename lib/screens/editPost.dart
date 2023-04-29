@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:adoptme/main.dart';
 import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/theme/theme_helper.dart';
-import 'package:adoptme/widgets/ageSelector_page.dart';
+import 'package:adoptme/widgets/ageselectorpage.dart';
 import 'package:adoptme/widgets/inputField.dart';
-import 'package:adoptme/widgets/petTypeSelector.dart';
+import 'package:adoptme/widgets/pettypeselector.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-import '../widgets/regionSelector.dart';
+import '../widgets/regionselector.dart';
 
 class EditPost extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;

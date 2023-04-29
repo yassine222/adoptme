@@ -1,4 +1,3 @@
-import 'package:atomsbox/atomsbox.dart';
 import 'package:flutter/material.dart';
 
 class MessagesPage extends StatefulWidget {
@@ -13,7 +12,7 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My messages"),
+        title: const Text("My messages"),
       ),
     );
   }

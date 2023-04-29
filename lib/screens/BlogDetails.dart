@@ -1,12 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors
+
 import 'package:adoptme/main.dart';
 import 'package:adoptme/widgets/inputField.dart';
 import 'package:atomsbox/atomsbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:intl/intl.dart';
-
-import '../theme/theme_helper.dart';
 
 class BlogDetails extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
@@ -29,6 +29,7 @@ class _BlogDetailsState extends State<BlogDetails> {
   @override
   void initState() {
     getUserPostData(user!.uid);
+
     super.initState();
   }
 
@@ -89,14 +90,13 @@ class _BlogDetailsState extends State<BlogDetails> {
                 const SizedBox(height: 4.0),
                 AppText.bodySmall(DateFormat.yMMMMEEEEd().format(date)),
                 const SizedBox(height: 8.0),
-                Column(
-                  children: [
-                    AppText.bodyMedium(
-                      widget.documentSnapshot["content"],
-                      fontSize: 15,
+                QuillEditor.basic(
+                    controller: QuillController(
+                      document:
+                          Document.fromJson(widget.documentSnapshot["content"]),
+                      selection: TextSelection.collapsed(offset: 0),
                     ),
-                  ],
-                ),
+                    readOnly: true),
                 Row(
                   children: [
                     Expanded(

@@ -1,21 +1,10 @@
-import 'package:adoptme/screens/home_page.dart';
-import 'package:adoptme/services/authService.dart';
+import 'package:adoptme/services/authservice.dart';
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:adoptme/widgets/header_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/route_manager.dart';
-import 'package:hexcolor/hexcolor.dart';
 
-import '../main.dart';
-import 'forgot_password_page.dart';
 import 'login_page.dart';
-import 'profile_page.dart';
-import 'set_profile_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -207,10 +196,12 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                                margin:
+                                    const EdgeInsets.fromLTRB(10, 20, 10, 20),
                                 //child: Text('Don\'t have an account? Create'),
                                 child: Text.rich(TextSpan(children: [
-                                  TextSpan(text: "Already have an account? "),
+                                  const TextSpan(
+                                      text: "Already have an account? "),
                                   TextSpan(
                                     text: 'Login',
                                     recognizer: TapGestureRecognizer()
@@ -219,11 +210,13 @@ class _SignupPageState extends State<SignupPage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    LoginPage()));
+                                                    const LoginPage()));
                                       },
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).accentColor),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary),
                                   ),
                                 ])),
                               ),

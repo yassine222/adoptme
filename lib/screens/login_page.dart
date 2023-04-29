@@ -1,26 +1,23 @@
+import 'package:adoptme/screens/home2.dart';
 import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/signup_page.dart';
-import 'package:adoptme/services/authService.dart';
+import 'package:adoptme/services/authservice.dart';
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:adoptme/widgets/header_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import '../main.dart';
 import 'forgot_password_page.dart';
-import 'profile_page.dart';
-import 'set_profile_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -43,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: _headerHeight,
               child: HeaderWidget(
                   _headerHeight,
@@ -151,7 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                                               context,
                                               emailController.text.trim(),
                                               passwordController.text.trim())
-                                          .then((value) => Get.to(HomePage()));
+                                          .then((value) =>
+                                              Get.to(() => const Home2()));
                                     }
                                   },
                                 ),
@@ -162,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                                 //child: Text('Don\'t have an account? Create'),
                                 child: Text.rich(TextSpan(children: [
                                   const TextSpan(
-                                      text: "Don\'t have an account? "),
+                                      text: "Don't have an account? "),
                                   TextSpan(
                                     text: 'Create',
                                     recognizer: TapGestureRecognizer()
@@ -171,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    SignupPage()));
+                                                    const SignupPage()));
                                       },
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -181,11 +179,11 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ])),
                               ),
-                              Text(
+                              const Text(
                                 "Or create account using social media",
                                 style: TextStyle(color: Colors.grey),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               GestureDetector(
@@ -197,7 +195,8 @@ class _LoginPageState extends State<LoginPage> {
                                 onTap: () {
                                   AuthService()
                                       .SignInWithFacebook(context)
-                                      .then((value) => Get.to(HomePage()));
+                                      .then((value) =>
+                                          Get.to(() => const HomePage()));
                                 },
                               ),
                             ],

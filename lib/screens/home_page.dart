@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:adoptme/screens/banned_page.dart';
 import 'package:adoptme/screens/details_page.dart';
-import 'package:adoptme/screens/set_profile_page.dart';
 import 'package:adoptme/widgets/drawer.dart';
 import 'package:adoptme/widgets/loadingwidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -41,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   ];
   Widget buildAnimalIcon(int index) {
     return Padding(
-      padding: EdgeInsets.only(right: 30.0),
+      padding: const EdgeInsets.only(right: 30.0),
       child: Column(
         children: <Widget>[
           InkWell(
@@ -58,10 +56,10 @@ class _HomePageState extends State<HomePage> {
               elevation: 8.0,
               borderRadius: BorderRadius.circular(20.0),
               child: Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Icon(
                   animalIcons[index],
-                  size: 30.0,
+                  size: 20.0,
                   color: selectedAnimalIconIndex == index
                       ? Colors.white
                       : Theme.of(context).primaryColor,
@@ -69,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 12.0,
           ),
           Text(
@@ -115,29 +113,29 @@ class _HomePageState extends State<HomePage> {
         stream: isUserBanned(user!.uid),
         builder: (context, snapshot) {
           if (snapshot.data == true) {
-            return BannedPage();
+            return const BannedPage();
           } else {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Home"),
+                title: const Text("Home"),
               ),
-              drawer: DrawerPage(),
+              drawer: const DrawerPage(),
               body: SingleChildScrollView(
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 24.0,
-                        vertical: 20.0,
+                        vertical: 10.0,
                       ),
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20.0)),
-                        padding: EdgeInsets.symmetric(horizontal: 12.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               FontAwesomeIcons.search,
                               color: Colors.grey,
                             ),
@@ -149,14 +147,14 @@ class _HomePageState extends State<HomePage> {
                                     searchedRegion = value;
                                   });
                                 },
-                                style: TextStyle(fontSize: 18.0),
-                                decoration: InputDecoration(
+                                style: const TextStyle(fontSize: 18.0),
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide.none),
                                     hintText: 'Search pets by region'),
                               ),
                             ),
-                            Icon(
+                            const Icon(
                               FontAwesomeIcons.filter,
                               color: Colors.grey,
                             ),
@@ -167,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: 120.0,
                       child: ListView.builder(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                           left: 24.0,
                           top: 8.0,
                         ),
@@ -215,8 +213,10 @@ class _HomePageState extends State<HomePage> {
                                         .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
-                            print(snapshot.error.toString());
-                            return Text('Something went wrong');
+                            if (kDebugMode) {
+                              print(snapshot.error.toString());
+                            }
+                            return const Text('Something went wrong');
                           }
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
@@ -230,14 +230,14 @@ class _HomePageState extends State<HomePage> {
                                   snapshot.data!.docs[index];
 
                               return Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     left: 40.0, bottom: 30.0, top: 20),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () {
-                                        Get.to(DetailPage(
+                                        Get.to(() => DetailPage(
                                             documentSnapshot:
                                                 documentSnapshot));
                                       },
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                                         width: double.infinity,
                                         height: 250.0,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(20.0),
                                             bottomLeft: Radius.circular(20.0),
                                           ),
@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(
+                                      padding: const EdgeInsets.fromLTRB(
                                           12.0, 12.0, 40.0, 0.0),
                                       child: Row(
                                         mainAxisAlignment:
@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                         children: <Widget>[
                                           Text(
                                             documentSnapshot["name"],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontFamily: 'Montserrat',
                                               fontSize: 24.0,
                                               fontWeight: FontWeight.bold,
@@ -277,11 +277,11 @@ class _HomePageState extends State<HomePage> {
                                                   documentSnapshot["id"] ==
                                                       user!.uid
                                               ? TextButton.icon(
-                                                  label: Text("Pending "),
+                                                  label: const Text("Pending "),
                                                   onPressed: () {
                                                     Get.snackbar("Pending",
                                                         "Please wait for admin approval of your post. Thank you.",
-                                                        icon: Icon(
+                                                        icon: const Icon(
                                                           Icons
                                                               .warning_amber_rounded,
                                                         ),
@@ -291,21 +291,21 @@ class _HomePageState extends State<HomePage> {
                                                             SnackPosition
                                                                 .BOTTOM);
                                                   },
-                                                  icon: Icon(
+                                                  icon: const Icon(
                                                     Icons.error,
                                                     size: 35,
                                                   ),
                                                 )
-                                              : SizedBox(),
+                                              : const SizedBox(),
                                         ],
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(
+                                      padding: const EdgeInsets.fromLTRB(
                                           12.0, 0.0, 40.0, 12.0),
                                       child: Text(
                                         documentSnapshot["breed"],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 16.0,
                                           color: Colors.grey,

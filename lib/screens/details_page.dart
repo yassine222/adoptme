@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore_for_file: prefer_const_constructors
-
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_text/expandable_text.dart';
@@ -8,10 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:adoptme/widgets/drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../services/favoriteService.dart';
+import '../services/favoriteservice.dart';
 
 class DetailPage extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
@@ -43,7 +39,7 @@ class _DetailPageState extends State<DetailPage> {
 
   Widget _buildInfoCard(String label, String info) {
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(10.0),
       width: 100.0,
       decoration: BoxDecoration(
         color: kPrimaryLightColor,
@@ -54,16 +50,16 @@ class _DetailPageState extends State<DetailPage> {
         children: <Widget>[
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
                 fontFamily: 'Montserrat',
                 fontSize: 16.0,
                 fontWeight: FontWeight.w600,
                 color: Colors.deepPurple),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             info,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Montserrat',
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
@@ -79,7 +75,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pet Details"),
+        title: const Text("Pet Details"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -100,10 +96,10 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 40.0, left: 10.0),
+                  padding: const EdgeInsets.only(top: 40.0, left: 10.0),
                   child: IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_back_ios,
                       size: 35,
                     ),
@@ -112,15 +108,15 @@ class _DetailPageState extends State<DetailPage> {
                 )
               ],
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
                     widget.documentSnapshot["name"],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold,
@@ -128,8 +124,8 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   IconButton(
                     icon: (isfavorite(widget.documentSnapshot["docID"]) == true)
-                        ? Icon(Icons.favorite)
-                        : Icon(Icons.favorite_border),
+                        ? const Icon(Icons.favorite)
+                        : const Icon(Icons.favorite_border),
                     iconSize: 30.0,
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
@@ -162,10 +158,10 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Text(
                 widget.documentSnapshot["breed"],
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Montserrat',
                   fontSize: 16.0,
                   color: Colors.grey,
@@ -173,7 +169,7 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 30.0),
+              margin: const EdgeInsets.only(top: 30.0),
               height: 120.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -194,10 +190,10 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 20.0, top: 30.0),
+              margin: const EdgeInsets.only(left: 20.0, top: 30.0),
               width: double.infinity,
               height: 90.0,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: kPrimaryLightColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
@@ -205,7 +201,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
               child: ListTile(
-                contentPadding: EdgeInsets.symmetric(
+                contentPadding: const EdgeInsets.symmetric(
                   horizontal: 20.0,
                   vertical: 8.0,
                 ),
@@ -223,7 +219,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 title: Text(
                   widget.documentSnapshot["owner"],
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.bold,
                       fontSize: 14),
@@ -245,22 +241,23 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 25.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 40.0, vertical: 25.0),
               child: ExpandableText(
                 widget.documentSnapshot["description"],
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Montserrat',
                   fontSize: 15.0,
                   height: 1.5,
                 ),
                 collapseText: 'less',
                 expandText: 'more',
-                linkStyle: TextStyle(fontWeight: FontWeight.w800),
+                linkStyle: const TextStyle(fontWeight: FontWeight.w800),
                 maxLines: 3,
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 20.0),
+              padding: const EdgeInsets.fromLTRB(40.0, 0.0, 40.0, 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -272,10 +269,10 @@ class _DetailPageState extends State<DetailPage> {
                       onPressed: () {
                         _makePhoneCall(widget.documentSnapshot["description"]);
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.call,
                       ),
-                      label: Text(
+                      label: const Text(
                         'Call',
                         style: TextStyle(
                           fontFamily: 'Montserrat',
@@ -292,10 +289,10 @@ class _DetailPageState extends State<DetailPage> {
                     child: ElevatedButton.icon(
                       style: ThemeHelper().buttonStyle(),
                       onPressed: () {},
-                      icon: FaIcon(
+                      icon: const FaIcon(
                         FontAwesomeIcons.whatsapp,
                       ),
-                      label: Text(
+                      label: const Text(
                         'Message',
                         style: TextStyle(
                           fontFamily: 'Montserrat',
