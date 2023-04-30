@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:adoptme/main.dart';
+import 'package:adoptme/screens/home2.dart';
 import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:adoptme/widgets/ageselectorpage.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,7 +36,7 @@ class _AddPetPageState extends State<AddPetPage> {
   File? image;
   // Owner Infos
 // ignore: prefer_final_fields
-  LatLng _initialcameraposition = const LatLng(36.897698, 10.190076);
+  LatLng _initialcameraposition = const LatLng(0.0, 0.0);
   LatLng _lastPosition = const LatLng(0.0, 0.0);
   final Set<Marker> _markers = {};
   String? _ownerImage;
@@ -51,6 +53,7 @@ class _AddPetPageState extends State<AddPetPage> {
   final Timestamp _createdAt = Timestamp.now();
   @override
   void initState() {
+    _getCurrentLocation();
     getUserPostData(user!.uid);
     _petGender = 'male';
     _petAge = "1";
@@ -214,34 +217,46 @@ class _AddPetPageState extends State<AddPetPage> {
                                 IconButton(
                                   onPressed: () {
                                     Get.bottomSheet(
-                                      Card(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadiusDirectional
-                                                    .circular(
-                                              40,
+                                        Card(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadiusDirectional
+                                                      .circular(
+                                                40,
+                                              ),
                                             ),
-                                          ),
-                                          child: GestureDetector(
-                                            child: GoogleMap(
-                                              onLongPress: _addMarker,
-                                              markers: _markers,
-                                              mapType: MapType.normal,
-                                              onCameraMove:
-                                                  (CameraPosition position) {
-                                                _lastPosition = position.target;
-                                              },
-                                              initialCameraPosition:
-                                                  CameraPosition(
-                                                      target:
-                                                          _initialcameraposition,
-                                                      zoom: 14),
+                                            child: GestureDetector(
+                                              child: GoogleMap(
+                                                onLongPress: _addMarker,
+                                                markers: {
+                                                  Marker(
+                                                      draggable: true,
+                                                      onDrag: (value) {
+                                                        _initialcameraposition =
+                                                            value;
+                                                      },
+                                                      markerId: const MarkerId(
+                                                          "myPosition"),
+                                                      position:
+                                                          _initialcameraposition)
+                                                },
+                                                mapType: MapType.normal,
+                                                onCameraMove:
+                                                    (CameraPosition position) {
+                                                  _lastPosition =
+                                                      position.target;
+                                                },
+                                                initialCameraPosition:
+                                                    CameraPosition(
+                                                        target:
+                                                            _initialcameraposition,
+                                                        zoom: 16),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
+                                        enableDrag: false);
                                   },
                                   icon: const Icon(Icons.location_on,
                                       color: Colors.deepPurple),
@@ -349,7 +364,7 @@ class _AddPetPageState extends State<AddPetPage> {
                                                   SnackPosition.BOTTOM);
                                         } else {
                                           addUserPost(user!.uid).then((value) =>
-                                              Get.to(() => const HomePage()));
+                                              Get.to(() => const Home2()));
                                         }
                                       }
                                     },
@@ -428,6 +443,8 @@ class _AddPetPageState extends State<AddPetPage> {
       'isactive': true,
       'createdAt': _createdAt,
       'isadopted': false,
+      'location': GeoPoint(
+          _initialcameraposition.latitude, _initialcameraposition.longitude)
     });
   }
 
@@ -458,5 +475,24 @@ class _AddPetPageState extends State<AddPetPage> {
       ));
       _lastPosition = point;
     });
+  }
+
+  void _getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error("Location services are disabled");
+    }
+
+    if (permission == LocationPermission.denied) {
+      return Future.error("Location permissions denied");
+    }
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      _initialcameraposition = LatLng(position.latitude, position.longitude);
+    });
+    print(_initialcameraposition);
   }
 }

@@ -12,7 +12,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -46,16 +48,37 @@ class _EditPostState extends State<EditPost> {
   String? _petName;
 
   Timestamp _updatedAt = Timestamp.now();
+
+  String? currentSex;
+  String? currentImage;
+  String? currentAge;
+  String? currentName;
+  String? currentDescription;
+  String? currentType;
+  String? currentBreed;
+  String? currentRegion;
+  GeoPoint? curentPostPosition;
+
   @override
   void initState() {
+    _getCurrentLocation();
     _petGender = widget.documentSnapshot["sex"];
+    currentSex = widget.documentSnapshot["sex"];
     _imageUrl = widget.documentSnapshot["image"];
+    currentImage = widget.documentSnapshot["image"];
     _petAge = widget.documentSnapshot["age"];
+    currentAge = widget.documentSnapshot["age"];
     _petName = widget.documentSnapshot["name"];
+    currentName = widget.documentSnapshot["name"];
     _petBreed = widget.documentSnapshot["breed"];
+    currentBreed = widget.documentSnapshot["breed"];
     _petType = widget.documentSnapshot["type"];
+    currentType = widget.documentSnapshot["type"];
     _petDescription = widget.documentSnapshot["description"];
+    currentDescription = widget.documentSnapshot["description"];
     _petRegion = widget.documentSnapshot["region"];
+    currentRegion = widget.documentSnapshot["region"];
+    curentPostPosition = widget.documentSnapshot["location"];
 
     super.initState();
   }
@@ -66,6 +89,9 @@ class _EditPostState extends State<EditPost> {
     petBreedController.dispose();
     super.dispose();
   }
+
+  LatLng _initialcameraposition = const LatLng(0.0, 0.0);
+  LatLng _lastPosition = const LatLng(0.0, 0.0);
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +228,67 @@ class _EditPostState extends State<EditPost> {
                                 },
                               ),
                             ),
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Get.bottomSheet(
+                                        Card(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadiusDirectional
+                                                      .circular(
+                                                40,
+                                              ),
+                                            ),
+                                            child: GestureDetector(
+                                              child: GoogleMap(
+                                                markers: {
+                                                  Marker(
+                                                      draggable: true,
+                                                      onDrag: (value) {
+                                                        setState(() {
+                                                          _initialcameraposition =
+                                                              value;
+                                                        });
+                                                      },
+                                                      markerId: const MarkerId(
+                                                          "myPosition"),
+                                                      position: LatLng(
+                                                          curentPostPosition!
+                                                              .latitude,
+                                                          curentPostPosition!
+                                                              .longitude))
+                                                },
+                                                mapType: MapType.normal,
+                                                onCameraMove:
+                                                    (CameraPosition position) {
+                                                  _lastPosition =
+                                                      position.target;
+                                                },
+                                                initialCameraPosition:
+                                                    CameraPosition(
+                                                        target: LatLng(
+                                                            curentPostPosition!
+                                                                .latitude,
+                                                            curentPostPosition!
+                                                                .longitude),
+                                                        zoom: 16),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        enableDrag: false);
+                                  },
+                                  icon: const Icon(Icons.location_on,
+                                      color: Colors.deepPurple),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                         Container(
@@ -307,8 +394,9 @@ class _EditPostState extends State<EditPost> {
                                               snackPosition:
                                                   SnackPosition.BOTTOM);
                                         } else {
-                                          updatePost(widget.documentSnapshot.id)
-                                              .then((value) {
+                                          updatePost(
+                                            widget.documentSnapshot.id,
+                                          ).then((value) {
                                             Get.snackbar("Success",
                                                 "Post updated successfully",
                                                 icon: const Icon(
@@ -366,7 +454,9 @@ class _EditPostState extends State<EditPost> {
     }
   }
 
-  Future<void> updatePost(String postId) async {
+  Future<void> updatePost(
+    String postId,
+  ) async {
     // Generate a new document ID
     final postToEdit =
         FirebaseFirestore.instance.collection('UserPost').doc(postId);
@@ -381,7 +471,37 @@ class _EditPostState extends State<EditPost> {
       'age': _petAge.toString(),
       'type': _petType!.toLowerCase().capitalizeFirst,
       "region": _petRegion!.toLowerCase().capitalizeFirst,
-      "isApproved": "waiting",
+      "isApproved": currentName != _petName ||
+              currentAge != _petAge ||
+              currentBreed != _petBreed ||
+              currentDescription != _petDescription ||
+              currentImage != _imageUrl ||
+              currentSex != _petGender ||
+              currentRegion != _petRegion ||
+              currentType != _petType
+          ? "waiting"
+          : "yes",
+      'location': GeoPoint(
+          _initialcameraposition.latitude, _initialcameraposition.longitude),
     });
+  }
+
+  void _getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error("Location services are disabled");
+    }
+
+    if (permission == LocationPermission.denied) {
+      return Future.error("Location permissions denied");
+    }
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    setState(() {
+      _initialcameraposition = LatLng(position.latitude, position.longitude);
+    });
+    print(_initialcameraposition);
   }
 }

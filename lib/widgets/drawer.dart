@@ -93,7 +93,7 @@ class _DrawerPageState extends State<DrawerPage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         Text(
                           "${data['fullname']}",
                           style: const TextStyle(

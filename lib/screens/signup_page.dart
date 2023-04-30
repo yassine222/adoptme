@@ -220,26 +220,6 @@ class _SignupPageState extends State<SignupPage> {
                                   ),
                                 ])),
                               ),
-                              // const Text(
-                              //   "Or create account using social media",
-                              //   style: TextStyle(color: Colors.grey),
-                              // ),
-                              // const SizedBox(
-                              //   height: 20,
-                              // ),
-                              // GestureDetector(
-                              //   child: FaIcon(
-                              //     FontAwesomeIcons.facebook,
-                              //     size: 35,
-                              //     color: HexColor("#3E529C"),
-                              //   ),
-                              //   onTap: () {
-                              //     AuthService()
-                              //         .SignInWithFacebook(context)
-                              //         .then(
-                              //             (value) => Get.to(const HomePage()));
-                              //   },
-                              // ),
                             ],
                           )),
                     ],

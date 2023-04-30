@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:adoptme/screens/home2.dart';
 import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/login_page.dart';
 import 'package:adoptme/services/authservice.dart';
@@ -254,8 +255,8 @@ class _SetProfileState extends State<SetProfile> {
                               ),
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  setProfile(user.uid).then(
-                                      (value) => Get.to(() => HomePage()));
+                                  setProfile(user.uid)
+                                      .then((value) => Get.to(() => Home2()));
                                 }
                               },
                             ),

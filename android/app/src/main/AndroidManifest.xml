@@ -1,11 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tekup.adoptme">
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <queries>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
+         <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+    </intent>
+    <intent>
+        <action android:name="android.intent.action.DIAL" />
+        <data android:scheme="tel" />
+    </intent>
+   
+        
     </queries>
+
+
 
     <uses-permission android:name="android.permission.INTERNET"/>
 

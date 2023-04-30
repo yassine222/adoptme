@@ -70,7 +70,7 @@ class _FavoritsPageState extends State<FavoritsPage> {
               ),
             ),
             SizedBox(
-              height: 700,
+              height: 500,
               child: StreamBuilder<QuerySnapshot>(
                 stream: petName == ""
                     ? _favoriteStream

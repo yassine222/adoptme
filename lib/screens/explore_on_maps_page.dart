@@ -36,6 +36,7 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
     BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       "assets/images/other.png",
+      mipmaps: false,
     ).then((icon) {
       setState(() {
         otherIcon = icon;
@@ -47,6 +48,7 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
     BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       "assets/images/dog.png",
+      mipmaps: false,
     ).then((icon) {
       setState(() {
         dogIcon = icon;
@@ -58,6 +60,7 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
     BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       "assets/images/cat.png",
+      mipmaps: false,
     ).then((icon) {
       setState(() {
         catIcon = icon;
@@ -69,6 +72,7 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
     BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       "assets/images/parrot.png",
+      mipmaps: false,
     ).then((icon) {
       setState(() {
         parrotIcon = icon;
@@ -80,6 +84,7 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
     BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       "assets/images/fish.png",
+      mipmaps: false,
     ).then((icon) {
       setState(() {
         fishIcon = icon;
@@ -150,8 +155,8 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
               return GoogleMap(
                 markers: Set<Marker>.of(markers),
                 mapType: MapType.normal,
-                initialCameraPosition: CameraPosition(
-                    target: LatLng(34.820746, 9.460153), zoom: 7),
+                initialCameraPosition:
+                    CameraPosition(target: _initialcameraposition, zoom: 14),
               );
             }
             return CircularProgressIndicator.adaptive();

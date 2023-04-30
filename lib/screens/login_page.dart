@@ -1,5 +1,4 @@
 import 'package:adoptme/screens/home2.dart';
-import 'package:adoptme/screens/home_page.dart';
 import 'package:adoptme/screens/signup_page.dart';
 import 'package:adoptme/services/authservice.dart';
 import 'package:adoptme/theme/theme_helper.dart';
@@ -196,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                   AuthService()
                                       .SignInWithFacebook(context)
                                       .then((value) =>
-                                          Get.to(() => const HomePage()));
+                                          Get.to(() => const Home2()));
                                 },
                               ),
                             ],

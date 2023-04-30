@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:adoptme/theme/theme_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,6 +38,35 @@ class _DetailPageState extends State<DetailPage> {
       path: phoneNumber,
     );
     await launchUrl(launchUri);
+  }
+
+  static Future<void> openMap(GeoPoint coerdinates) async {
+    String latitude = coerdinates.latitude.toString();
+    String longitude = coerdinates.longitude.toString();
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunch(googleUrl)) {
+      if (longitude == "0.0" && latitude == "0.0") {
+        Get.snackbar("Error", "Cant get direction for goolge Maps ",
+            icon: const Icon(
+              Icons.warning_amber_rounded,
+            ),
+            backgroundColor: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
+      } else {
+        await launch(googleUrl);
+      }
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
+  Future<void> launchWhatsapp(
+      {required String phone, String message = ""}) async {
+    String launchurl = "whatsapp://send?phone=+216$phone&text=$message";
+    await canLaunch(launchurl)
+        ? await launch(launchurl)
+        : print('Could not launch app');
   }
 
   Widget _buildInfoCard(String label, String info) {
@@ -75,6 +107,13 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                openMap(widget.documentSnapshot["location"]);
+              },
+              icon: const Icon(Icons.directions))
+        ],
         title: const Text("Pet Details"),
       ),
       body: SingleChildScrollView(
@@ -95,17 +134,6 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 40.0, left: 10.0),
-                  child: IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      size: 35,
-                    ),
-                    color: Colors.white,
-                  ),
-                )
               ],
             ),
             const SizedBox(height: 20.0),
@@ -267,7 +295,7 @@ class _DetailPageState extends State<DetailPage> {
                     child: ElevatedButton.icon(
                       style: ThemeHelper().buttonStyle(),
                       onPressed: () {
-                        _makePhoneCall(widget.documentSnapshot["description"]);
+                        _makePhoneCall(widget.documentSnapshot["phone"]);
                       },
                       icon: const Icon(
                         Icons.call,
@@ -288,7 +316,9 @@ class _DetailPageState extends State<DetailPage> {
                     decoration: ThemeHelper().buttonBoxDecoration(context),
                     child: ElevatedButton.icon(
                       style: ThemeHelper().buttonStyle(),
-                      onPressed: () {},
+                      onPressed: () {
+                        launchWhatsapp(phone: widget.documentSnapshot["phone"]);
+                      },
                       icon: const FaIcon(
                         FontAwesomeIcons.whatsapp,
                       ),
@@ -319,9 +349,9 @@ class _DetailPageState extends State<DetailPage> {
         .collection('Favorite')
         .get()
         .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         favorite.add(doc.id);
-      });
+      }
       favoriteList = favorite;
       if (mounted) {
         setState(() {

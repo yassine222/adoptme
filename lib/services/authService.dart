@@ -140,6 +140,13 @@ class AuthService {
   Future<void> SignInWithFacebook(
     BuildContext context,
   ) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
     try {
       final LoginResult loginResult = await FacebookAuth.instance.login();
 
@@ -155,5 +162,6 @@ class AuthService {
           backgroundColor: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
     }
+    navigatorkey.currentState!.popUntil((route) => route.isFirst);
   }
 }
