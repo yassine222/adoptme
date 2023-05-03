@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:adoptme/main.dart';
 import 'package:adoptme/screens/details_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../services/favoriteservice.dart';
 
 class PetDetailsWidget extends StatefulWidget {
   final String imageUrl;
@@ -56,6 +59,7 @@ class PetDetailsWidget extends StatefulWidget {
 }
 
 class _PetDetailsWidgetState extends State<PetDetailsWidget> {
+  List<String> favoriteList = [];
   LatLng _initialcameraposition = const LatLng(0.0, 0.0);
   @override
   Widget build(BuildContext context) {
@@ -106,9 +110,33 @@ class _PetDetailsWidgetState extends State<PetDetailsWidget> {
                   color: Colors.blue,
                 ),
                 IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.bookmark),
-                  color: Colors.green,
+                  onPressed: () {
+                    if (isfavorite(widget.snapshot["docID"]) == false) {
+                      FavoriteService().setfavorite(
+                        widget.snapshot["image"],
+                        widget.snapshot["name"],
+                        widget.snapshot["breed"],
+                        widget.snapshot["description"],
+                        widget.snapshot["id"],
+                        widget.snapshot["owner"],
+                        widget.snapshot["sex"],
+                        widget.snapshot["color"],
+                        widget.snapshot["age"],
+                        widget.snapshot["adress"],
+                        widget.snapshot["ownerImage"],
+                        widget.snapshot["type"],
+                        widget.snapshot["createdAt"],
+                        widget.snapshot["phone"],
+                        widget.snapshot["docID"],
+                      );
+                    } else {
+                      FavoriteService().infavorite(widget.snapshot["docID"]);
+                    }
+                  },
+                  icon: (isfavorite(widget.snapshot["docID"]) == true)
+                      ? const Icon(Icons.favorite)
+                      : const Icon(Icons.favorite_border),
+                  color: Colors.pink,
                 ),
               ],
             ),
@@ -135,5 +163,30 @@ class _PetDetailsWidgetState extends State<PetDetailsWidget> {
       _initialcameraposition = LatLng(position.latitude, position.longitude);
     });
     print(_initialcameraposition);
+  }
+
+  bool isfavorite(String id) {
+    List<String> favorite = [];
+    FirebaseFirestore.instance
+        .collection('UserProfile')
+        .doc(user!.uid)
+        .collection('Favorite')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        favorite.add(doc.id);
+      }
+      favoriteList = favorite;
+      if (mounted) {
+        setState(() {
+          favoriteList = favorite;
+        });
+      }
+    });
+    if (favoriteList.contains(id)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

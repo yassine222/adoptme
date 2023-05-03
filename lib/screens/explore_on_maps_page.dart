@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:adoptme/widgets/botomsheet.dart';
+import 'package:adoptme/widgets/loadingwidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -159,7 +160,7 @@ class ExploreOnMapsState extends State<ExploreOnMaps> {
                     CameraPosition(target: _initialcameraposition, zoom: 14),
               );
             }
-            return CircularProgressIndicator.adaptive();
+            return Loading2();
           }),
     );
   }

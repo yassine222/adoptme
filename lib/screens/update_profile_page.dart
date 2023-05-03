@@ -148,11 +148,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     onChanged: (value) {
                                       username = value;
                                     },
-                                    decoration: ThemeHelper()
-                                        .textInputDecoration(
-                                            'User Name',
-                                            'Enter your user name',
-                                            const Icon(Icons.person)),
+                                    decoration:
+                                        ThemeHelper().textInputDecoration(
+                                      'User Name',
+                                      'Enter your user name',
+                                      GestureDetector(
+                                        child: const Icon(Icons.person),
+                                      ),
+                                    ),
                                     validator: (val) {
                                       if (val!.isEmpty) {
                                         return "Please enter your user name";
@@ -171,11 +174,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     onChanged: (value) {
                                       phone = value;
                                     },
-                                    decoration: ThemeHelper()
-                                        .textInputDecoration(
-                                            "Mobile Number",
-                                            "Enter your mobile number",
-                                            const Icon(Icons.phone)),
+                                    decoration:
+                                        ThemeHelper().textInputDecoration(
+                                      "Mobile Number",
+                                      "Enter your mobile number",
+                                      GestureDetector(
+                                        child: const Icon(Icons.phone),
+                                      ),
+                                    ),
                                     keyboardType: TextInputType.phone,
                                   ),
                                 ),
@@ -188,11 +194,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                     onChanged: (value) {
                                       adress = value;
                                     },
-                                    decoration: ThemeHelper()
-                                        .textInputDecoration(
-                                            "Address",
-                                            "Enter your address",
-                                            const Icon(Icons.pin_drop)),
+                                    decoration:
+                                        ThemeHelper().textInputDecoration(
+                                      "Address",
+                                      "Enter your address",
+                                      GestureDetector(
+                                          child: const Icon(Icons.pin_drop)),
+                                    ),
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         return 'Enter your address';

@@ -63,7 +63,7 @@ class _DetailPageState extends State<DetailPage> {
 
   Future<void> launchWhatsapp(
       {required String phone, String message = ""}) async {
-    String launchurl = "whatsapp://send?phone=+216$phone&text=$message";
+    String launchurl = "whatsapp://send?phone=216$phone&text=$message";
     await canLaunch(launchurl)
         ? await launch(launchurl)
         : print('Could not launch app');

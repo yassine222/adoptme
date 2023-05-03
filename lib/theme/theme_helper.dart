@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class ThemeHelper {
-  InputDecoration textInputDecoration([
-    String lableText = "",
-    String hintText = "",
-    Icon? icon,
-  ]) {
+  InputDecoration textInputDecoration(
+      [String lableText = "",
+      String hintText = "",
+      GestureDetector? icon,
+      Icon? iconData]) {
     return InputDecoration(
       labelText: lableText,
       hintText: hintText,
-      prefixIcon: icon,
+      suffix: icon,
+      suffixIcon: iconData,
       fillColor: Colors.white,
       filled: true,
       contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),

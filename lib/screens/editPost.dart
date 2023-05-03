@@ -105,7 +105,7 @@ class _EditPostState extends State<EditPost> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add Pet'),
+          title: Text('Edit Post'),
         ),
         body: SingleChildScrollView(
           child: Form(

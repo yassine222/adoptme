@@ -30,6 +30,13 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
+  bool isObscure = true;
+  @override
+  void initState() {
+    isObscure = true;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -138,9 +145,24 @@ class _SignupPageState extends State<SignupPage> {
                                     return null;
                                   },
                                   controller: passwordController,
-                                  obscureText: true,
+                                  obscureText: isObscure,
                                   decoration: ThemeHelper().textInputDecoration(
-                                      'Password', 'Enter your password'),
+                                    'Password',
+                                    'Enter your password',
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isObscure = !isObscure;
+                                        });
+                                      },
+                                      child: Icon(
+                                        isObscure
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Colors.deepPurple,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 20.0),
@@ -149,10 +171,11 @@ class _SignupPageState extends State<SignupPage> {
                                     ThemeHelper().inputBoxDecorationShaddow(),
                                 child: TextFormField(
                                   controller: confirmPasswordController,
-                                  obscureText: true,
+                                  obscureText: isObscure,
                                   decoration: ThemeHelper().textInputDecoration(
-                                      "Confirm Password*",
-                                      "Enter your password"),
+                                    "Confirm Password*",
+                                    "Enter your password",
+                                  ),
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return 'Confirm your password';
@@ -197,7 +220,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                               Container(
                                 margin:
-                                    const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                                    const EdgeInsets.fromLTRB(10, 20, 10, 30),
                                 //child: Text('Don\'t have an account? Create'),
                                 child: Text.rich(TextSpan(children: [
                                   const TextSpan(

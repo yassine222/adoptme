@@ -154,8 +154,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                                   LoginPage()),
                                         );
                                       },
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.deepPurple),
                                   ),
                                 ],
                               ),

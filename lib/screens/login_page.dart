@@ -24,12 +24,19 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isObscure = true;
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    isObscure = true;
+    super.initState();
   }
 
   @override
@@ -97,9 +104,24 @@ class _LoginPageState extends State<LoginPage> {
                                     return null;
                                   },
                                   controller: passwordController,
-                                  obscureText: true,
+                                  obscureText: isObscure,
                                   decoration: ThemeHelper().textInputDecoration(
-                                      'Password', 'Enter your password'),
+                                    'Password',
+                                    'Enter your password',
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          isObscure = !isObscure;
+                                        });
+                                      },
+                                      child: Icon(
+                                        isObscure
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Colors.deepPurple,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 15.0),

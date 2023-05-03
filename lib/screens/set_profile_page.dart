@@ -144,7 +144,11 @@ class _SetProfileState extends State<SetProfile> {
                               decoration: ThemeHelper().textInputDecoration(
                                   'User Name',
                                   'Enter your user name',
-                                  Icon(Icons.person)),
+                                  GestureDetector(
+                                    child: Icon(
+                                      Icons.person,
+                                    ),
+                                  )),
                               validator: (val) {
                                 if (val!.isEmpty) {
                                   return "Please enter your user name";
@@ -162,7 +166,11 @@ class _SetProfileState extends State<SetProfile> {
                               decoration: ThemeHelper().textInputDecoration(
                                   "Mobile Number",
                                   "Enter your mobile number",
-                                  Icon(Icons.phone)),
+                                  GestureDetector(
+                                    child: Icon(
+                                      Icons.phone,
+                                    ),
+                                  )),
                               keyboardType: TextInputType.phone,
                               validator: (val) {
                                 if (val!.isEmpty) {
@@ -181,7 +189,9 @@ class _SetProfileState extends State<SetProfile> {
                               decoration: ThemeHelper().textInputDecoration(
                                   "Address",
                                   "Enter your address",
-                                  Icon(Icons.pin_drop)),
+                                  GestureDetector(
+                                    child: Icon(Icons.pin_drop),
+                                  )),
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Enter your address';
