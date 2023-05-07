@@ -133,7 +133,7 @@ class _NewsPageState extends State<NewsPage> {
                                     child: Text(
                                       categories[index],
                                       style: TextStyle(
-                                        fontSize: 18.0,
+                                        fontSize: 15.0,
                                         fontWeight: FontWeight.bold,
                                         color: _selectedCategory ==
                                                 categories[index]

@@ -10,6 +10,7 @@ import 'package:adoptme/widgets/inputField.dart';
 import 'package:adoptme/widgets/pettypeselector.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -443,14 +444,16 @@ class _EditPostState extends State<EditPost> {
         setState(() {
           _imageUrl = value;
         });
-        print(value);
+        debugPrint(value);
       });
 
       setState(() {
         this.image = imageTemp;
       });
     } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
+      if (kDebugMode) {
+        print('Failed to pick image: $e');
+      }
     }
   }
 
@@ -502,6 +505,8 @@ class _EditPostState extends State<EditPost> {
     setState(() {
       _initialcameraposition = LatLng(position.latitude, position.longitude);
     });
-    print(_initialcameraposition);
+    if (kDebugMode) {
+      print(_initialcameraposition);
+    }
   }
 }

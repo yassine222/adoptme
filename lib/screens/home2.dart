@@ -64,7 +64,7 @@ class _Home2State extends State<Home2> {
                       hoverColor: Colors.grey[100]!,
                       gap: 8,
                       activeColor: Colors.deepPurple,
-                      iconSize: 24,
+                      iconSize: 22,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
                       duration: const Duration(milliseconds: 400),

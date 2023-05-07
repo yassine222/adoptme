@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  final _scrollController = ScrollController();
   final CollectionReference _petStrem =
       FirebaseFirestore.instance.collection('UserPost');
 
@@ -177,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(
-                      height: 500,
+                      height: 470,
                       child: StreamBuilder<QuerySnapshot>(
                         stream: selectedAnimalIconIndex == 0 &&
                                 searchedRegion == ""
